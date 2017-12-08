@@ -1,6 +1,6 @@
 # DUNGEONBASE
 
-**DUNGEONBASE** is a service that allows HEROs and their QUESTGIVERSs to create, book, and COMPLETE QUESTs. You are building a web app for them. It should allow you to:
+**DUNGEONBASE** is a service that allows HEROs and their clients to create, book, and COMPLETE QUESTs. You are building a web app for them. It should allow you to:
 
 * List HEROs and QUESTs
 * Add HEROs and QUESTs
