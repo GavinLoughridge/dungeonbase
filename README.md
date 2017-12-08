@@ -66,7 +66,7 @@ Your app should accommodate and make use of all of the following sample data, wh
 
 | Objective Name    | Objective Location | Objective Map                   | Objective Danger | Questgiver Name   | Budget |
 |-------------------|--------------------|---------------------------------|------------------|-------------------|--------|
-| Samwise Gamgee    | Mount Doom         | https://goo.gl/images/Egk7cD    | 3                | Gandalf           | 40     |
+| Samwise Gamgee    | Mount Doom         | https://goo.gl/images/Egk7cD    | 3                | Gandalf the Grey  | 40     |
 | Jon Snow          | Beyond the Wall    | https://goo.gl/images/bPVHyf    | 9                | Ned Stark         | 70     |
 | Luke Skywalker    | Death Star         | https://goo.gl/images/W3ycjT    | 7                | Mon Mothma        | 35     |
 | Rubeus Hagrid     | Hogwarts           | https://goo.gl/images/x7aafj    | 10               | Olympe Maxime     | 25     |
