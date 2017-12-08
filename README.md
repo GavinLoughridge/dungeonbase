@@ -74,7 +74,7 @@ Your app should accommodate and make use of all of the following sample data, wh
 
 ## ERD
 
-[here](dungeonbase.xml)
+![ERD](dungeonbase.xml)
 
 ## Notes
 
