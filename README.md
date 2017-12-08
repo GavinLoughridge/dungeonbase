@@ -72,6 +72,9 @@ Your app should accommodate and make use of all of the following sample data, wh
 | Hogwarts          | England           | https://goo.gl/images/x7aafj    | 10              | Lord Voldemort    | 25     |
 | The Capital       | District 1        | https://goo.gl/images/TZpW4k    | 4               | Alma Coin         | 10     |
 
+## ERD
+
+[here](dungeonbase.xml)
 
 ## Notes
 
