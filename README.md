@@ -64,13 +64,13 @@ Your app should accommodate and make use of all of the following sample data, wh
 
 ### Contracts
 
-| Objective Name    | Objective Location | Objective Map                   | Objective Danger | Questgiver Name   | Budget |
+| Dungeon Name      | Dungeon  Location  | Dungeon Map                     | Dungeon   Danger | Questgiver Name   | Budget |
 |-------------------|--------------------|---------------------------------|------------------|-------------------|--------|
-| Samwise Gamgee    | Mount Doom         | https://goo.gl/images/Egk7cD    | 3                | Gandalf the Grey  | 40     |
-| Jon Snow          | Beyond the Wall    | https://goo.gl/images/bPVHyf    | 9                | Ned Stark         | 70     |
-| Luke Skywalker    | Death Star         | https://goo.gl/images/W3ycjT    | 7                | Mon Mothma        | 35     |
-| Rubeus Hagrid     | Hogwarts           | https://goo.gl/images/x7aafj    | 10               | Olympe Maxime     | 25     |
-| Prim Everdeen     | The Capital        | https://goo.gl/images/TZpW4k    | 4                | Alma Coin         | 10     |
+| Mount Doom        | Mordor             | https://goo.gl/images/Egk7cD    | 3                | Gandalf the Grey  | 40     |
+| Beyond the Wall   | North              | https://goo.gl/images/bPVHyf    | 9                | Ned Stark         | 70     |
+| Death Star        | Endor              | https://goo.gl/images/W3ycjT    | 7                | Mon Mothma        | 35     |
+| Hogwarts          | England            | https://goo.gl/images/x7aafj    | 10               | Tom Riddle        | 25     |
+| The Capital       | District 1         | https://goo.gl/images/TZpW4k    | 4                | Alma Coin         | 10     |
 
 ## ERD
 
