@@ -1,54 +1,54 @@
-# DUNGEONBASE
+# Dungeonbase
 
-**DUNGEONBASE** is a service that allows HEROs and their clients to create, book, and COMPLETE QUESTs. You are building a web app for them. It should allow you to:
+**Dungeonbase** is a service that allows Heros and their clients to create, book, and complete Quests. You are building a web app for them. It should allow you to:
 
-* List HEROs and QUESTs
-* Add HEROs and QUESTs
-* Assign QUESTs to HEROs
-* Modify and remove HEROs and QUESTs
+* List Heros and Quests
+* Add Heros and Quests
+* Assign Quests to Heros
+* Modify and remove Heros and Quests
 
-There may be some additional features, such as search, that are nice-to-haves, but a lower priority than the core features. Focus on the basic CRUD actions. The good people at DUNGEONBASE have provided you some sample data from their existing registry that you can use for development.
+There may be some additional features, such as search, that are nice-to-haves, but a lower priority than the core features. Focus on the basic CRUD actions. The good people at Dungeonbase have provided you some sample data from their existing registry that you can use for development.
 
 ## Import stories into Issue Tracker
 
 Import these user stories into a new project in the issue tracker of your choice. You may find it useful to prioritize the stories before you begin.
 
 * As a user, I need to be able to identify the company (style/branding/logo)
-* As a user, I need to be able to list all the HEROs
-* As a user, I need to be able to delete an existing HERO
-* As a user, I need to be able to edit existing HERO
-* As a user, I need to be able to link to a specific HERO
-* As a user, I need to be able to list all the QUESTs
-* As a user, I need to be able to easily navigate between HEROs and QUESTs
-* As a user, I need to be able to add a QUEST
-* As a user, I need to be able to assign a HERO to a QUEST
-* As a user, I need to be able to delete an existing QUEST
-* As a user, I need to be able to edit existing QUESTs
-* As a user, I need to be able to link to a specific QUEST
-* As a user, I need to be able to link to a QUEST from a HERO.
-* As a user, I need to be able to link to a HERO from a QUEST
-* As a user, I need to be able to filter/sort HEROs by price, LEVEL, or rating
-* As a user, I need to limit the number of HERO results I receive at a time
-* As a user, I need to limit the number of QUESTs I receive at a time
-* As a user, I need to search for HEROs
-* As a user, I need to be able to search for QUESTs
-* As a user, I need to be able to search for active QUESTs
-* As a user, I need to be able see the total number of HEROs
-* As a user, I need to be able to see the total number of QUESTs
-* As a user, I need to be able to add a new HERO
-* As a user, I need to be able to assign a HERO to a QUEST
-* As a user, I need to be able to complete a QUEST
-* As a user, I need to be able to remove a HERO from a QUEST
+* As a user, I need to be able to list all the Heros
+* As a user, I need to be able to delete an existing Hero
+* As a user, I need to be able to edit existing Hero
+* As a user, I need to be able to link to a specific Hero
+* As a user, I need to be able to list all the Quests
+* As a user, I need to be able to easily navigate between Heros and Quests
+* As a user, I need to be able to add a Quest
+* As a user, I need to be able to assign a Hero to a Quest
+* As a user, I need to be able to delete an existing Quest
+* As a user, I need to be able to edit existing Quests
+* As a user, I need to be able to link to a specific Quest
+* As a user, I need to be able to link to a Quest from a Hero.
+* As a user, I need to be able to link to a Hero from a Quest
+* As a user, I need to be able to filter/sort Heros by price, Level, or rating
+* As a user, I need to limit the number of Hero results I receive at a time
+* As a user, I need to limit the number of Quests I receive at a time
+* As a user, I need to search for Heros
+* As a user, I need to be able to search for Quests
+* As a user, I need to be able to search for active Quests
+* As a user, I need to be able see the total number of Heros
+* As a user, I need to be able to see the total number of Quests
+* As a user, I need to be able to add a new Hero
+* As a user, I need to be able to assign a Hero to a Quest
+* As a user, I need to be able to complete a Quest
+* As a user, I need to be able to remove a Hero from a Quest
 
 ## Sample Data
 
-Your app should accommodate and make use of all of the following sample data, which can be downloaded [here](data/HEROs.csv) and [here](data/QUESTs.csv). **Note that the data is denormalized,** and will require some transformation to get into the database.
+Your app should accommodate and make use of all of the following sample data, which can be downloaded [here](data/Heros.csv) and [here](data/Quests.csv). **Note that the data is denormalized,** and will require some transformation to get into the database.
 
-1) Create an entity relationship diagram for the tables in the DUNGEONBASE database.
-2) Create the DUNGEONBASE database, and write the knex migrations to create all the tables.
+1) Create an entity relationship diagram for the tables in the Dungeonbase database.
+2) Create the Dungeonbase database, and write the knex migrations to create all the tables.
 3) Write the knex files to seed the database with the following information:
 
-### HEROs
+### Heros
 
 | Full Name        | Code Names              | TALENT                     | Contact Info             | Age | Price | Rating | LEVEL |
 |------------------|-------------------------|----------------------------|--------------------------|-----|-------|--------|-------|
