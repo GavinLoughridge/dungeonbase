@@ -50,7 +50,7 @@ Your app should accommodate and make use of all of the following sample data, wh
 
 ### Heros
 
-| Full Name        | Code Names              | TALENT                     | Contact Info             | Age | Price | Rating | LEVEL |
+| Full Name        | Code Names              | Talent                     | Contact Info             | Age | Price | Rating | LEVEL |
 |------------------|-------------------------|----------------------------|--------------------------|-----|-------|--------|-------|
 | Bilbo Baggins    | Burglar                 | Theft                      | barrelrider@gmail.com    | 31  | 45    | 7.5    | 28    |
 | Arya Stark       | A Girl                  | Disguise                   | faceless@gmail.com       | 52  | 40    | 9      | 72    |
