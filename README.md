@@ -50,7 +50,7 @@ Your app should accommodate and make use of all of the following sample data, wh
 
 ### Heros
 
-| Full Name        | Code Names              | Talent                     | Contact Info             | Age | Price | Rating | LEVEL |
+| Full Name        | Nicknames              | Talent                     | Contact Info             | Age | Price | Rating | Level |
 |------------------|-------------------------|----------------------------|--------------------------|-----|-------|--------|-------|
 | Bilbo Baggins    | Burglar                 | Theft                      | barrelrider@gmail.com    | 31  | 45    | 7.5    | 28    |
 | Arya Stark       | A Girl                  | Disguise                   | faceless@gmail.com       | 52  | 40    | 9      | 72    |
@@ -64,13 +64,13 @@ Your app should accommodate and make use of all of the following sample data, wh
 
 ### Contracts
 
-| Target Name       | Target Location   | Target Map                      | Target Danger   | Client Name       | Budget |
-|-------------------|-------------------|---------------------------------|-----------------|-------------------|--------|
-| Mount Doom        | Mordor            | https://goo.gl/images/Egk7cD    | 3               | Gandalf           | 40     |
-| Beyond the Wall   | North             | https://goo.gl/images/bPVHyf    | 9               | Ned Stark         | 70     |
-| Death Star        | Endor             | https://goo.gl/images/W3ycjT    | 7               | Mon Mothma        | 35     |
-| Hogwarts          | England           | https://goo.gl/images/x7aafj    | 10              | Lord Voldemort    | 25     |
-| The Capital       | District 1        | https://goo.gl/images/TZpW4k    | 4               | Alma Coin         | 10     |
+| Objective Name    | Objective Location | Objective Map                   | Objective Danger | Questgiver Name   | Budget |
+|-------------------|--------------------|---------------------------------|------------------|-------------------|--------|
+| Samwise Gamgee    | Mount Doom         | https://goo.gl/images/Egk7cD    | 3                | Gandalf           | 40     |
+| Jon Snow          | Beyond the Wall    | https://goo.gl/images/bPVHyf    | 9                | Ned Stark         | 70     |
+| Luke Skywalker    | Death Star         | https://goo.gl/images/W3ycjT    | 7                | Mon Mothma        | 35     |
+| Rubeus Hagrid     | Hogwarts           | https://goo.gl/images/x7aafj    | 10               | Olympe Maxime     | 25     |
+| Prim Everdeen     | The Capital        | https://goo.gl/images/TZpW4k    | 4                | Alma Coin         | 10     |
 
 ## ERD
 
