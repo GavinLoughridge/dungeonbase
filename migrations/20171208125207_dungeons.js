@@ -2,7 +2,7 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTableIfNotExists('dungeons', function (table) {
     table.increments();
-    table.text('name');
+    table.text('dungeon_name');
     table.text('location');
     table.text('map');
     table.integer('danger');

@@ -2,7 +2,7 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTableIfNotExists('persons', function (table) {
     table.increments();
-    table.text('name');
+    table.text('person_name');
   });
 };
 
