@@ -22,7 +22,7 @@ exports.seed = function(knex, Promise) {
         dungeon_name: quest[0],
         location: quest[1],
         map: quest[2],
-        danger: quest[3]
+        threat: quest[3]
       })
     }
   }

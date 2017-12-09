@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
     table.text('dungeon_name');
     table.text('location');
     table.text('map');
-    table.integer('danger');
+    table.integer('threat');
   });
 };
 
