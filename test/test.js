@@ -18,7 +18,7 @@ afterEach(function() {
   // runs after each test in this block
 });
 
-describe('API Routes', function() {
+describe('Hero API Routes', function() {
 
   beforeEach(function(done) {
     knex.migrate.rollback()
@@ -40,7 +40,7 @@ describe('API Routes', function() {
     })
   })
 
-  describe('GET /', function() {
+  describe('GET', function() {
     it('should return 404 if path is missing an element', function(done) {
       chai.request(server)
       .get('/')
@@ -49,12 +49,10 @@ describe('API Routes', function() {
       done();
       });
     });
-  });
 
-  describe('GET /heros', function() {
-    it('should return all heros', function(done) {
+    it('should return all heros if no inndex is specified', function(done) {
       chai.request(server)
-      .get('/heros')
+      .get('/api/heros')
       .end(function(err, res) {
       res.should.have.status(200);
       res.should.be.json;
@@ -81,12 +79,10 @@ describe('API Routes', function() {
       done();
       });
     });
-  });
 
-  describe('GET /heros/1', function() {
-    it('should return hero with a specific index', function(done) {
+    it('should return specific hero if given an index', function(done) {
       chai.request(server)
-      .get('/heros/1')
+      .get('/api/heros/1')
       .end(function(err, res) {
       res.should.have.status(200);
       res.should.be.json;
@@ -112,23 +108,19 @@ describe('API Routes', function() {
       done();
       });
     });
-  });
 
-  describe('GET /heros/0', function() {
     it('should return 404 if index is invalid', function(done) {
       chai.request(server)
-      .get('/heros/0')
+      .get('/api/heros/0')
       .end(function(err, res) {
       res.should.have.status(404);
       done();
       });
     });
-  });
 
-  describe('GET /heros/blarg', function() {
     it('should return 400 if index is of the wrong type', function(done) {
       chai.request(server)
-      .get('/heros/blarg')
+      .get('/api/heros/blarg')
       .end(function(err, res) {
       res.should.have.status(400);
       done();
@@ -136,7 +128,7 @@ describe('API Routes', function() {
     });
   });
 
-  describe('POST /', function() {
+  describe('POST', function() {
     it('should return 400 if path is missing an element', function(done) {
       chai.request(server)
       .post('/')
@@ -145,12 +137,10 @@ describe('API Routes', function() {
       done();
       });
     });
-  });
 
-  describe('POST /heros', function() {
     it('should return newly created hero regardless if nicknames is empty', function(done) {
       chai.request(server)
-      .post('/heros')
+      .post('/api/heros')
       .send({
         name: 'Hiro Protagonist',
         nicknames: [],
@@ -170,7 +160,7 @@ describe('API Routes', function() {
       res.body.should.have.property('name');
       res.body.name.should.equal('Hiro Protagonist');
       res.body.should.have.property('nicknames');
-      res.body.nicknames.should.deep.equal(['The Deliverator']);
+      res.body.nicknames.should.deep.equal([]);
       res.body.should.have.property('talent');
       res.body.talent.should.equal('Swords');
       res.body.should.have.property('contact');
@@ -186,12 +176,10 @@ describe('API Routes', function() {
       done();
       });
     });
-  });
 
-  describe('POST /heros', function() {
     it('should return newly created hero if name is blank and multiple nicknames are included', function(done) {
       chai.request(server)
-      .post('/heros')
+      .post('/api/heros')
       .send({
         name: '',
         nicknames: ['The Deliverator', 'Gargoyle'],
@@ -211,7 +199,7 @@ describe('API Routes', function() {
       res.body.should.have.property('name');
       res.body.name.should.equal('');
       res.body.should.have.property('nicknames');
-      res.body.nicknames.should.deep.equal(['The Deliverator']);
+      res.body.nicknames.should.deep.equal(['The Deliverator', 'Gargoyle']);
       res.body.should.have.property('talent');
       res.body.talent.should.equal('Swords');
       res.body.should.have.property('contact');
@@ -227,12 +215,10 @@ describe('API Routes', function() {
       done();
       });
     });
-  });
 
-  describe('POST /heros', function() {
     it('should return 400 if a field is missing', function(done) {
       chai.request(server)
-      .post('/heros')
+      .post('/api/heros')
       .send({
         name: 'Hiro Protagonist',
         nicknames: ['The Deliverator'],
@@ -247,12 +233,10 @@ describe('API Routes', function() {
       done();
       });
     });
-  });
 
-  describe('POST /heros', function() {
     it('should return 400 if a field is of the wrong type', function(done) {
       chai.request(server)
-      .post('/heros')
+      .post('/api/heros')
       .send({
         name: 'Hiro Protagonist',
         nicknames: ['The Deliverator'],
@@ -268,12 +252,10 @@ describe('API Routes', function() {
       done();
       });
     });
-  });
 
-  describe('POST /heros/1', function() {
     it('should return 400 if path has erroneous elements', function(done) {
       chai.request(server)
-      .post('/heros/1')
+      .post('/api/heros/1')
       .end(function(err, res) {
       res.should.have.status(400);
       done();
