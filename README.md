@@ -57,7 +57,7 @@ Your app should accommodate and make use of all of the following sample data, wh
 |                  | The Doctor              | Running                    | jellybaby@gmail.com      | 28  | 20    | 6.5    | 35    |
 | Rincewind        |                         | Accidents                  | disastermagnet@gmail.com | 27  | 25    | 7      | 48    |
 | Roland Deschain  | Gunslinger              | Guns                       | towerfan@gmail.com       | 35  | 50    | 9.5    | 433   |
-| Hermione Granger |                         | Intelligence               | nerdalert@gmail.com      | 26  | 15    | 6.5    | 13    |
+| Hermione Granger |                         | Intelligence               | bookworm@gmail.com       | 26  | 15    | 6.5    | 13    |
 | Buffy Summers    | The Slayer              | Everything                 | scooby1@gmail.com        | 41  | 30    | 8.5    | 87    |
 | Thomas Anderson  | Neo, The One            | Spoon bending              | redpill@gmail.com        | 28  | 30    | 7      | 32    |
 | Katniss Everdeen | The Girl on Fire        | Archery                    | D12_4_LYF@gmail.com      | 60  | 0     | 8      | 24    |
