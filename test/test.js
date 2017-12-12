@@ -50,7 +50,7 @@ describe('Hero API Routes', function() {
       });
     });
 
-    it('should return all heros if no inndex is specified', function(done) {
+    it('should return all heros if no index is specified', function(done) {
       chai.request(server)
       .get('/api/heros')
       .end(function(err, res) {
@@ -258,6 +258,254 @@ describe('Hero API Routes', function() {
       .post('/api/heros/1')
       .end(function(err, res) {
       res.should.have.status(400);
+      done();
+      });
+    });
+  });
+
+  describe('PATCH', function() {
+    it('should return 400 if index is missing', function(done) {
+      chai.request(server)
+      .patch('/api/heros')
+      .end(function(err, res) {
+      res.should.have.status(400);
+      done();
+      });
+    });
+
+    it('should return 400 if body is invalid', function(done) {
+      chai.request(server)
+      .patch('/api/heros/1')
+      .send({
+        age: 'forty',
+        price: 23,
+        rating: 6,
+        level: 18
+      })
+      .end(function(err, res) {
+      res.should.have.status(400);
+      done();
+      });
+    });
+
+    it('should return 404 if id is invalid', function(done) {
+      chai.request(server)
+      .patch('/api/heros/0')
+      .send({
+        price: 23,
+        rating: 6,
+        level: 18
+      })
+      .end(function(err, res) {
+      res.should.have.status(404);
+      done();
+      });
+    });
+
+    it('should return updated hero if id and body are valid', function(done) {
+      chai.request(server)
+      .patch('/api/heros/1')
+      .send({
+        price: 23,
+        rating: 6,
+        level: 18
+      })
+      .end(function(err, res) {
+      res.should.have.status(200);
+      res.should.be.json;
+      res.body.should.be.an('object');
+      res.body.should.have.property('id');
+      res.body.id.should.equal(1);
+      res.body.should.have.property('name');
+      res.body.name.should.equal('Bilbo Baggins');
+      res.body.should.have.property('nicknames');
+      res.body.nicknames.should.deep.equal(['Burglar']);
+      res.body.should.have.property('talent');
+      res.body.talent.should.equal('Theft');
+      res.body.should.have.property('contact');
+      res.body.contact.should.equal('barrelrider@gmail.com');
+      res.body.should.have.property('age');
+      res.body.age.should.equal(31);
+      res.body.should.have.property('price');
+      res.body.price.should.equal(23);
+      res.body.should.have.property('rating');
+      res.body.rating.should.equal(6);
+      res.body.should.have.property('level');
+      res.body.level.should.equal(18);
+      done();
+      });
+    });
+
+    it('should return updated hero if id and body are valid and contain a new name', function(done) {
+      chai.request(server)
+      .patch('/api/heros/1')
+      .send({
+        name: 'blarg',
+        price: 23,
+        rating: 6,
+        level: 18
+      })
+      .end(function(err, res) {
+      res.should.have.status(200);
+      res.should.be.json;
+      res.body.should.be.an('object');
+      res.body.should.have.property('id');
+      res.body.id.should.equal(1);
+      res.body.should.have.property('name');
+      res.body.name.should.equal('blarg');
+      res.body.should.have.property('nicknames');
+      res.body.nicknames.should.deep.equal(['Burglar']);
+      res.body.should.have.property('talent');
+      res.body.talent.should.equal('Theft');
+      res.body.should.have.property('contact');
+      res.body.contact.should.equal('barrelrider@gmail.com');
+      res.body.should.have.property('age');
+      res.body.age.should.equal(31);
+      res.body.should.have.property('price');
+      res.body.price.should.equal(23);
+      res.body.should.have.property('rating');
+      res.body.rating.should.equal(6);
+      res.body.should.have.property('level');
+      res.body.level.should.equal(18);
+      done();
+      });
+    });
+
+    it('should return updated hero if id and body are valid and contain an existing name', function(done) {
+      chai.request(server)
+      .patch('/api/heros/1')
+      .send({
+        name: 'Mon Mothma',
+        price: 23,
+        rating: 6,
+        level: 18
+      })
+      .end(function(err, res) {
+      res.should.have.status(200);
+      res.should.be.json;
+      res.body.should.be.an('object');
+      res.body.should.have.property('id');
+      res.body.id.should.equal(1);
+      res.body.should.have.property('name');
+      res.body.name.should.equal('Mon Mothma');
+      res.body.should.have.property('nicknames');
+      res.body.nicknames.should.deep.equal(['Burglar']);
+      res.body.should.have.property('talent');
+      res.body.talent.should.equal('Theft');
+      res.body.should.have.property('contact');
+      res.body.contact.should.equal('barrelrider@gmail.com');
+      res.body.should.have.property('age');
+      res.body.age.should.equal(31);
+      res.body.should.have.property('price');
+      res.body.price.should.equal(23);
+      res.body.should.have.property('rating');
+      res.body.rating.should.equal(6);
+      res.body.should.have.property('level');
+      res.body.level.should.equal(18);
+      done();
+      });
+    });
+
+    it('should return updated hero if id and body are valid and contain nicknames', function(done) {
+      chai.request(server)
+      .patch('/api/heros/1')
+      .send({
+        nicknames: ['blarg', 'foo', 'bar'],
+        price: 23,
+        rating: 6,
+        level: 18
+      })
+      .end(function(err, res) {
+      res.should.have.status(200);
+      res.should.be.json;
+      res.body.should.be.an('object');
+      res.body.should.have.property('id');
+      res.body.id.should.equal(1);
+      res.body.should.have.property('name');
+      res.body.name.should.equal('Bilbo Baggins');
+      res.body.should.have.property('nicknames');
+      res.body.nicknames.should.deep.equal(['Burglar', 'blarg', 'foo', 'bar']);
+      res.body.should.have.property('talent');
+      res.body.talent.should.equal('Theft');
+      res.body.should.have.property('contact');
+      res.body.contact.should.equal('barrelrider@gmail.com');
+      res.body.should.have.property('age');
+      res.body.age.should.equal(31);
+      res.body.should.have.property('price');
+      res.body.price.should.equal(23);
+      res.body.should.have.property('rating');
+      res.body.rating.should.equal(6);
+      res.body.should.have.property('level');
+      res.body.level.should.equal(18);
+      done();
+      });
+    });
+  })
+
+  describe('DELETE', function() {
+    it('should return 400 if index is missing', function(done) {
+      chai.request(server)
+      .delete('/api/heros')
+      .end(function(err, res) {
+      res.should.have.status(400);
+      done();
+      });
+    });
+
+    it('should return 400 if index is non-numeric', function(done) {
+      chai.request(server)
+      .delete('/api/heros')
+      .end(function(err, res) {
+      res.should.have.status(400);
+      done();
+      });
+    });
+
+    it('should return 404 if hero can not befound', function(done) {
+      chai.request(server)
+      .delete('/api/heros/0')
+      .end(function(err, res) {
+      res.should.have.status(404);
+      done();
+      });
+    });
+
+    it('should return deleted hero if index is valid', function(done) {
+      chai.request(server)
+      .delete('/api/heros/1')
+      .end(function(err, res) {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.an('object');
+        res.body.should.have.property('id');
+        res.body.id.should.equal(1);
+        res.body.should.have.property('name');
+        res.body.name.should.equal('Bilbo Baggins');
+        res.body.should.have.property('nicknames');
+        res.body.nicknames.should.deep.equal(['Burglar']);
+        res.body.should.have.property('talent');
+        res.body.talent.should.equal('Theft');
+        res.body.should.have.property('contact');
+        res.body.contact.should.equal('barrelrider@gmail.com');
+        res.body.should.have.property('age');
+        res.body.age.should.equal(31);
+        res.body.should.have.property('price');
+        res.body.price.should.equal(45);
+        res.body.should.have.property('rating');
+        res.body.rating.should.equal(7.5);
+        res.body.should.have.property('level');
+        res.body.level.should.equal(28);
+        done();
+      });
+    });
+  });
+
+  describe('PUT', function() {
+    it('should return 405 if put request is recived', function(done) {
+      chai.request(server)
+      .put('/api/heros')
+      .end(function(err, res) {
+      res.should.have.status(405);
       done();
       });
     });
