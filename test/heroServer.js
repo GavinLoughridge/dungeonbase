@@ -12,12 +12,6 @@ const chaiHttp = require('chai-http');
 const server = require('../server');
 chai.use(chaiHttp);
 
-
-
-afterEach(function() {
-  // runs after each test in this block
-});
-
 describe('Hero API Routes', function() {
 
   beforeEach(function(done) {
@@ -173,6 +167,64 @@ describe('Hero API Routes', function() {
       res.body.rating.should.equal(6);
       res.body.should.have.property('level');
       res.body.level.should.equal(18);
+      done();
+      });
+    });
+
+    it('should return newly created hero if name is existing non-hero person', function(done) {
+      chai.request(server)
+      .post('/api/heros')
+      .send({
+        name: 'Mon Mothma',
+        nicknames: [],
+        talent: 'Command',
+        contact: 'reble@gmail.com',
+        age: 43,
+        price: 23,
+        rating: 6,
+        level: 18
+      })
+      .end(function(err, res) {
+      res.should.have.status(200);
+      res.should.be.json;
+      res.body.should.be.an('object');
+      res.body.should.have.property('id');
+      res.body.id.should.equal(10);
+      res.body.should.have.property('name');
+      res.body.name.should.equal('Mon Mothma');
+      res.body.should.have.property('nicknames');
+      res.body.nicknames.should.deep.equal([]);
+      res.body.should.have.property('talent');
+      res.body.talent.should.equal('Command');
+      res.body.should.have.property('contact');
+      res.body.contact.should.equal('reble@gmail.com');
+      res.body.should.have.property('age');
+      res.body.age.should.equal(43);
+      res.body.should.have.property('price');
+      res.body.price.should.equal(23);
+      res.body.should.have.property('rating');
+      res.body.rating.should.equal(6);
+      res.body.should.have.property('level');
+      res.body.level.should.equal(18);
+      done();
+      });
+    });
+
+    it('should return 400 if hero name alreay exists', function(done) {
+      chai.request(server)
+      .post('/api/heros')
+      .send({
+        name: 'Bilbo Baggins',
+        nicknames: [],
+        talent: 'Command',
+        contact: 'reble@gmail.com',
+        age: 43,
+        price: 23,
+        rating: 6,
+        level: 18
+      })
+      .end(function(err, res) {
+      res.should.have.status(400);
       done();
       });
     });
@@ -454,14 +506,14 @@ describe('Hero API Routes', function() {
 
     it('should return 400 if index is non-numeric', function(done) {
       chai.request(server)
-      .delete('/api/heros')
+      .delete('/api/heros/blarg')
       .end(function(err, res) {
       res.should.have.status(400);
       done();
       });
     });
 
-    it('should return 404 if hero can not befound', function(done) {
+    it('should return 404 if hero can not be found', function(done) {
       chai.request(server)
       .delete('/api/heros/0')
       .end(function(err, res) {
