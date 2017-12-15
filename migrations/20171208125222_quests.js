@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
     table.integer('questgiver_id').references('questgivers.id').onDelete('cascade');
     table.integer('dungeon_id').references('dungeons.id');
     table.integer('reward');
-    table.boolean('completed');
+    table.boolean('completed').defaultTo(false);
     table.integer('completed_by').references('persons.id');
   });
 };

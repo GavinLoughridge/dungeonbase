@@ -55,15 +55,13 @@ describe('Quest API Routes', function() {
       res.body[0].should.have.property('id');
       res.body[0].id.should.be.a('number');
       res.body[0].should.have.property('dungeon');
-      res.body[0].dungeon.should.be.a('object');
-      res.body[0].dungeon.shouldhave.property('dungeon_name');
-      res.body[0].dungeon.dungeon_name.should.be.a('string');
-      res.body[0].dungeon.shouldhave.property('location');
-      res.body[0].dungeon.location.should.be.a('string');
-      res.body[0].dungeon.shouldhave.property('map');
-      res.body[0].dungeon.map.should.be.a('string');
-      res.body[0].dungeon.shouldhave.property('threat');
-      res.body[0].dungeon.threat.should.be.a('number');
+      res.body[0].dungeon.should.be.a('string');
+      res.body[0].should.have.property('location');
+      res.body[0].location.should.be.a('string');
+      res.body[0].should.have.property('map');
+      res.body[0].map.should.be.a('string');
+      res.body[0].should.have.property('threat');
+      res.body[0].threat.should.be.a('number');
       res.body[0].should.have.property('questgiver');
       res.body[0].questgiver.should.be.a('string');
       res.body[0].should.have.property('reward');
@@ -71,7 +69,7 @@ describe('Quest API Routes', function() {
       res.body[0].should.have.property('completed');
       res.body[0].completed.should.be.a('boolean');
       res.body[0].should.have.property('completed_by');
-      res.body[0].completed_by.should.be.a('string');
+      should.equal(res.body[0].completed_by, null);
       done();
       });
     });
@@ -84,17 +82,15 @@ describe('Quest API Routes', function() {
       res.should.be.json;
       res.body.should.be.a('object');
       res.body.should.have.property('id');
-      res.body.id.should.equal('1');
+      res.body.id.should.equal(1);
       res.body.should.have.property('dungeon');
-      res.body.dungeon.should.be.a('object');
-      res.body.dungeon.shouldhave.property('dungeon_name');
-      res.body.dungeon.dungeon_name.should.equal('Mount Doom');
-      res.body.dungeon.shouldhave.property('location');
-      res.body.dungeon.location.should.equal('Mordor');
-      res.body.dungeon.shouldhave.property('map');
-      res.body.dungeon.map.should.equal('https://goo.gl/images/Egk7cD');
-      res.body.dungeon.shouldhave.property('threat');
-      res.body.dungeon.threat.should.equal(3);
+      res.body.dungeon.should.equal('Mount Doom');
+      res.body.should.have.property('location');
+      res.body.location.should.equal('Mordor');
+      res.body.should.have.property('map');
+      res.body.map.should.equal('https://goo.gl/images/Egk7cD');
+      res.body.should.have.property('threat');
+      res.body.threat.should.equal(3);
       res.body.should.have.property('questgiver');
       res.body.questgiver.should.equal('Gandalf the Grey');
       res.body.should.have.property('reward');
@@ -102,7 +98,7 @@ describe('Quest API Routes', function() {
       res.body.should.have.property('completed');
       res.body.completed.should.equal(false);
       res.body.should.have.property('completed_by');
-      res.body.completed_by.should.equal(null);
+      should.equal(res.body.completed_by, null);
       done();
       });
     });
@@ -140,13 +136,11 @@ describe('Quest API Routes', function() {
       chai.request(server)
       .post('/api/quests')
       .send({
-        dungeon: {
-          dungeon_name: 'Borg Cube',
-          location: 'space',
-          map: 'tbd',
-          threat: 7
-        },
-        questgiver: 'Capitan Picard',
+        dungeon: 'Borg Cube',
+        location: 'space',
+        map: 'tbd',
+        threat: 7,
+        contact: 'almacoin@dungeonbase.net',
         reward: 50
       })
       .end(function(err, res) {
@@ -156,23 +150,55 @@ describe('Quest API Routes', function() {
       res.body.should.have.property('id');
       res.body.id.should.be.a('number');
       res.body.should.have.property('dungeon');
-      res.body.dungeon.should.be.a('object');
-      res.body.dungeon.shouldhave.property('dungeon_name');
-      res.body.dungeon.dungeon_name.should.equal('Borg Cube');
-      res.body.dungeon.shouldhave.property('location');
-      res.body.dungeon.location.should.equal('space');
-      res.body.dungeon.shouldhave.property('map');
-      res.body.dungeon.map.should.equal('tbd');
-      res.body.dungeon.shouldhave.property('threat');
-      res.body.dungeon.threat.should.equal(7);
+      res.body.dungeon.should.equal('Borg Cube');
+      res.body.should.have.property('location');
+      res.body.location.should.equal('space');
+      res.body.should.have.property('map');
+      res.body.map.should.equal('tbd');
+      res.body.should.have.property('threat');
+      res.body.threat.should.equal(7);
       res.body.should.have.property('questgiver');
-      res.body.questgiver.should.equal('Capitan Picard');
+      res.body.questgiver.should.equal('Alma Coin');
       res.body.should.have.property('reward');
       res.body.reward.should.equal(50);
       res.body.should.have.property('completed');
       res.body.completed.should.equal(false);
       res.body.should.have.property('completed_by');
-      res.body.completed_by.should.equal(null);
+      should.equal(res.body.completed_by, null);
+      done();
+      });
+    });
+
+    it('should return 400 if questgiver already has a quest for this dungeon', function(done) {
+      chai.request(server)
+      .post('/api/quests')
+      .send({
+        dungeon: 'The Capital',
+        location: 'space',
+        map: 'tbd',
+        threat: 7,
+        contact: 'almacoin@dungeonbase.net',
+        reward: 50
+      })
+      .end(function(err, res) {
+      res.should.have.status(400);
+      done();
+      });
+    });
+
+    it('should return 400 if questgiver contact does not exist', function(done) {
+      chai.request(server)
+      .post('/api/quests')
+      .send({
+        dungeon: 'The Capital',
+        location: 'space',
+        map: 'tbd',
+        threat: 7,
+        contact: 'bob@dungeonbase.net',
+        reward: 50
+      })
+      .end(function(err, res) {
+      res.should.have.status(400);
       done();
       });
     });
@@ -181,13 +207,11 @@ describe('Quest API Routes', function() {
       chai.request(server)
       .post('/api/quests')
       .send({
-        dungeon: {
-          dungeon_name: 'Borg Cube',
-          location: 'space',
-          map: 100,
-          threat: 7
-        },
-        questgiver: 'Capitan Picard',
+        dungeon: 'Borg Cube',
+        location: 'space',
+        map: 100,
+        threat: 7,
+        contact: 'almacoin@dungeonbase.net',
         reward: 50
       })
       .end(function(err, res) {
@@ -200,13 +224,11 @@ describe('Quest API Routes', function() {
       chai.request(server)
       .post('/api/quests')
       .send({
-        dungeon: {
-          dungeon_name: 'Borg Cube',
-          location: 'space',
-          map: 'tbd',
-          threat: 7
-        },
-        questgiver: 'Capitan Picard',
+        dungeon: 'Borg Cube',
+        location: 'space',
+        map: 'tbd',
+        threat: 7,
+        contact: 'almacoin@dungeonbase.net',
         reward: 50,
         name: 'john'
       })
@@ -220,13 +242,11 @@ describe('Quest API Routes', function() {
       chai.request(server)
       .post('/api/quests')
       .send({
-        dungeon: {
-          dungeon_name: 'Borg Cube',
-          location: 'space',
-          map: 'tbd',
-          threat: 'john'
-        },
-        questgiver: 'Capitan Picard',
+        dungeon: 'Borg Cube',
+        location: 'space',
+        map: 'tbd',
+        threat: 'john',
+        contact: 'almacoin@dungeonbase.net',
         reward: 50
       })
       .end(function(err, res) {
@@ -259,13 +279,11 @@ describe('Quest API Routes', function() {
       chai.request(server)
       .patch('/api/quests/1')
       .send({
-        dungeon: {
-          name: 'Borg Cube',
-          location: 'space',
-          map: 'tbd',
-          threat: 7
-        },
-        questgiver: 'Capitan Picard',
+        name: 'Borg Cube',
+        location: 'space',
+        map: 'tbd',
+        threat: 7,
+        contact: 'almacoin@dungeonbase.net',
         reward: 50
       })
       .end(function(err, res) {
@@ -274,11 +292,56 @@ describe('Quest API Routes', function() {
       });
     });
 
+    it('should return 400 if body contains contact change', function(done) {
+      chai.request(server)
+      .patch('/api/quests/1')
+      .send({
+        contact: 'almacoin@dungeonbase.net'
+      })
+      .end(function(err, res) {
+      res.should.have.status(400);
+      done();
+      });
+    });
+
+    it('should return updated quest if body contains same contact', function(done) {
+      chai.request(server)
+      .patch('/api/quests/1')
+      .send({
+        contact: 'gandalfthegrey@dungeonbase.net',
+        reward: 2
+      })
+      .end(function(err, res) {
+      res.should.have.status(200);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('id');
+      res.body.id.should.equal(1);
+      res.body.should.have.property('dungeon');
+      res.body.dungeon.should.equal('Mount Doom');
+      res.body.should.have.property('location');
+      res.body.location.should.equal('Mordor');
+      res.body.should.have.property('map');
+      res.body.map.should.equal('https://goo.gl/images/Egk7cD');
+      res.body.should.have.property('threat');
+      res.body.threat.should.equal(3);
+      res.body.should.have.property('questgiver');
+      res.body.questgiver.should.equal('Gandalf the Grey');
+      res.body.should.have.property('reward');
+      res.body.reward.should.equal(2);
+      res.body.should.have.property('completed');
+      res.body.completed.should.equal(false);
+      res.body.should.have.property('completed_by');
+      should.equal(res.body.completed_by, null);
+      done();
+      });
+    });
+
     it('should return 404 if id is invalid', function(done) {
       chai.request(server)
       .patch('/api/quests/0')
       .send({
-        questgiver: 'Capitan Picard',
+        contact: 'almacoin@dungeonbase.net',
         reward: 50
       })
       .end(function(err, res) {
@@ -291,7 +354,6 @@ describe('Quest API Routes', function() {
       chai.request(server)
       .patch('/api/quests/1')
       .send({
-        questgiver: 'Capitan Picard',
         reward: 50
       })
       .end(function(err, res) {
@@ -299,25 +361,23 @@ describe('Quest API Routes', function() {
       res.should.be.json;
       res.body.should.be.a('object');
       res.body.should.have.property('id');
-      res.body.id.should.equal('1');
+      res.body.id.should.equal(1);
       res.body.should.have.property('dungeon');
-      res.body.dungeon.should.be.a('object');
-      res.body.dungeon.shouldhave.property('dungeon_name');
-      res.body.dungeon.dungeon_name.should.equal('Mount Doom');
-      res.body.dungeon.shouldhave.property('location');
-      res.body.dungeon.location.should.equal('Mordor');
-      res.body.dungeon.shouldhave.property('map');
-      res.body.dungeon.map.should.equal('https://goo.gl/images/Egk7cD');
-      res.body.dungeon.shouldhave.property('threat');
-      res.body.dungeon.threat.should.equal(3);
+      res.body.dungeon.should.equal('Mount Doom');
+      res.body.should.have.property('location');
+      res.body.location.should.equal('Mordor');
+      res.body.should.have.property('map');
+      res.body.map.should.equal('https://goo.gl/images/Egk7cD');
+      res.body.should.have.property('threat');
+      res.body.threat.should.equal(3);
       res.body.should.have.property('questgiver');
-      res.body.questgiver.should.equal('Capitan Picard');
+      res.body.questgiver.should.equal('Gandalf the Grey');
       res.body.should.have.property('reward');
       res.body.reward.should.equal(50);
       res.body.should.have.property('completed');
       res.body.completed.should.equal(false);
       res.body.should.have.property('completed_by');
-      res.body.completed_by.should.equal(null);
+      should.equal(res.body.completed_by, null);
       done();
       });
     });
@@ -326,29 +386,25 @@ describe('Quest API Routes', function() {
       chai.request(server)
       .patch('/api/quests/1')
       .send({
-        dungeon: {
-          name: 'Borg Cube',
-          location: 'space',
-          map: 'tbd',
-          threat: 7
-        }
+        dungeon: 'Borg Cube',
+        location: 'space',
+        map: 'tbd',
+        threat: 7
       })
       .end(function(err, res) {
       res.should.have.status(200);
       res.should.be.json;
       res.body.should.be.a('object');
       res.body.should.have.property('id');
-      res.body.id.should.equal('1');
+      res.body.id.should.equal(1);
       res.body.should.have.property('dungeon');
-      res.body.dungeon.should.be.a('object');
-      res.body.dungeon.shouldhave.property('dungeon_name');
-      res.body.dungeon.dungeon_name.should.equal('Borg Cube');
-      res.body.dungeon.shouldhave.property('location');
-      res.body.dungeon.location.should.equal('space');
-      res.body.dungeon.shouldhave.property('map');
-      res.body.dungeon.map.should.equal('tbd');
-      res.body.dungeon.shouldhave.property('threat');
-      res.body.dungeon.threat.should.equal(7);
+      res.body.dungeon.should.equal('Borg Cube');
+      res.body.should.have.property('location');
+      res.body.location.should.equal('space');
+      res.body.should.have.property('map');
+      res.body.map.should.equal('tbd');
+      res.body.should.have.property('threat');
+      res.body.threat.should.equal(7);
       res.body.should.have.property('questgiver');
       res.body.questgiver.should.equal('Gandalf the Grey');
       res.body.should.have.property('reward');
@@ -356,37 +412,33 @@ describe('Quest API Routes', function() {
       res.body.should.have.property('completed');
       res.body.completed.should.equal(false);
       res.body.should.have.property('completed_by');
-      res.body.completed_by.should.equal(null);
+      should.equal(res.body.completed_by, null);
       done();
       });
     });
 
-    it('should return updated hero if id and body are valid and contain an existing dungeon', function(done) {
+    it('should return updated quest if id and body are valid and contain an existing dungeon', function(done) {
       chai.request(server)
       .patch('/api/quests/1')
       .send({
-        dungeon: {
-          name: 'Death Star',
-          location: 'Alderaan',
-          map: 'https://goo.gl/images/efp9aD',
-        }
+        dungeon: 'Death Star',
+        location: 'Alderaan',
+        map: 'https://goo.gl/images/efp9aD'
       })
       .end(function(err, res) {
       res.should.have.status(200);
       res.should.be.json;
       res.body.should.be.a('object');
       res.body.should.have.property('id');
-      res.body.id.should.equal('1');
+      res.body.id.should.equal(1);
       res.body.should.have.property('dungeon');
-      res.body.dungeon.should.be.a('object');
-      res.body.dungeon.shouldhave.property('dungeon_name');
-      res.body.dungeon.dungeon_name.should.equal('Death Star');
-      res.body.dungeon.shouldhave.property('location');
-      res.body.dungeon.location.should.equal('Alderaan');
-      res.body.dungeon.shouldhave.property('map');
-      res.body.dungeon.map.should.equal('https://goo.gl/images/efp9aD');
-      res.body.dungeon.shouldhave.property('threat');
-      res.body.dungeon.threat.should.equal(7);
+      res.body.dungeon.should.equal('Death Star');
+      res.body.should.have.property('location');
+      res.body.location.should.equal('Alderaan');
+      res.body.should.have.property('map');
+      res.body.map.should.equal('https://goo.gl/images/efp9aD');
+      res.body.should.have.property('threat');
+      res.body.threat.should.equal(7);
       res.body.should.have.property('questgiver');
       res.body.questgiver.should.equal('Gandalf the Grey');
       res.body.should.have.property('reward');
@@ -394,7 +446,7 @@ describe('Quest API Routes', function() {
       res.body.should.have.property('completed');
       res.body.completed.should.equal(false);
       res.body.should.have.property('completed_by');
-      res.body.completed_by.should.equal(null);
+      should.equal(res.body.completed_by, null);
       done();
       });
     });
@@ -436,17 +488,15 @@ describe('Quest API Routes', function() {
       res.should.be.json;
       res.body.should.be.a('object');
       res.body.should.have.property('id');
-      res.body.id.should.equal('1');
+      res.body.id.should.equal(1);
       res.body.should.have.property('dungeon');
-      res.body.dungeon.should.be.a('object');
-      res.body.dungeon.shouldhave.property('dungeon_name');
-      res.body.dungeon.dungeon_name.should.equal('Mount Doom');
-      res.body.dungeon.shouldhave.property('location');
-      res.body.dungeon.location.should.equal('Mordor');
-      res.body.dungeon.shouldhave.property('map');
-      res.body.dungeon.map.should.equal('https://goo.gl/images/Egk7cD');
-      res.body.dungeon.shouldhave.property('threat');
-      res.body.dungeon.threat.should.equal(3);
+      res.body.dungeon.should.equal('Mount Doom');
+      res.body.should.have.property('location');
+      res.body.location.should.equal('Mordor');
+      res.body.should.have.property('map');
+      res.body.map.should.equal('https://goo.gl/images/Egk7cD');
+      res.body.should.have.property('threat');
+      res.body.threat.should.equal(3);
       res.body.should.have.property('questgiver');
       res.body.questgiver.should.equal('Gandalf the Grey');
       res.body.should.have.property('reward');
@@ -454,7 +504,7 @@ describe('Quest API Routes', function() {
       res.body.should.have.property('completed');
       res.body.completed.should.equal(false);
       res.body.should.have.property('completed_by');
-      res.body.completed_by.should.equal(null);
+      should.equal(res.body.completed_by, null);
       done();
       });
     });

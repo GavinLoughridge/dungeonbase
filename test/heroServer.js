@@ -123,11 +123,50 @@ describe('Hero API Routes', function() {
   });
 
   describe('POST', function() {
-    it('should return 400 if path is missing an element', function(done) {
+    it('should return 404 if path is missing an element', function(done) {
       chai.request(server)
       .post('/')
       .end(function(err, res) {
       res.should.have.status(404);
+      done();
+      });
+    });
+
+    it('should return newly created hero if body is valid', function(done) {
+      chai.request(server)
+      .post('/api/heros')
+      .send({
+        name: 'Hiro Protagonist',
+        nicknames: ['the deliverator'],
+        talent: 'Swords',
+        contact: 'founder@metaverse.com',
+        age: 43,
+        price: 23,
+        rating: 6,
+        level: 18
+      })
+      .end(function(err, res) {
+      res.should.have.status(200);
+      res.should.be.json;
+      res.body.should.be.an('object');
+      res.body.should.have.property('id');
+      res.body.id.should.be.a('number');
+      res.body.should.have.property('name');
+      res.body.name.should.equal('Hiro Protagonist');
+      res.body.should.have.property('nicknames');
+      res.body.nicknames.should.deep.equal(['the deliverator']);
+      res.body.should.have.property('talent');
+      res.body.talent.should.equal('Swords');
+      res.body.should.have.property('contact');
+      res.body.contact.should.equal('founder@metaverse.com');
+      res.body.should.have.property('age');
+      res.body.age.should.equal(43);
+      res.body.should.have.property('price');
+      res.body.price.should.equal(23);
+      res.body.should.have.property('rating');
+      res.body.rating.should.equal(6);
+      res.body.should.have.property('level');
+      res.body.level.should.equal(18);
       done();
       });
     });
@@ -171,14 +210,14 @@ describe('Hero API Routes', function() {
       });
     });
 
-    it('should return newly created hero if name is existing non-hero person', function(done) {
+    it('should return newly created hero if contact is existing non-hero person', function(done) {
       chai.request(server)
       .post('/api/heros')
       .send({
         name: 'Mon Mothma',
         nicknames: [],
         talent: 'Command',
-        contact: 'reble@gmail.com',
+        contact: 'monmothma@dungeonbase.net',
         age: 43,
         price: 23,
         rating: 6,
@@ -197,7 +236,7 @@ describe('Hero API Routes', function() {
       res.body.should.have.property('talent');
       res.body.talent.should.equal('Command');
       res.body.should.have.property('contact');
-      res.body.contact.should.equal('reble@gmail.com');
+      res.body.contact.should.equal('monmothma@dungeonbase.net');
       res.body.should.have.property('age');
       res.body.age.should.equal(43);
       res.body.should.have.property('price');
@@ -210,33 +249,14 @@ describe('Hero API Routes', function() {
       });
     });
 
-    it('should return 400 if hero name alreay exists', function(done) {
+    it('should return newly created hero if name is existing hero person', function(done) {
       chai.request(server)
       .post('/api/heros')
       .send({
         name: 'Bilbo Baggins',
         nicknames: [],
         talent: 'Command',
-        contact: 'reble@gmail.com',
-        age: 43,
-        price: 23,
-        rating: 6,
-        level: 18
-      })
-      .end(function(err, res) {
-      res.should.have.status(400);
-      done();
-      });
-    });
-
-    it('should return newly created hero if name is blank and multiple nicknames are included', function(done) {
-      chai.request(server)
-      .post('/api/heros')
-      .send({
-        name: '',
-        nicknames: ['The Deliverator', 'Gargoyle'],
-        talent: 'Swords',
-        contact: 'founder@metaverse.com',
+        contact: 'newemail@web.net',
         age: 43,
         price: 23,
         rating: 6,
@@ -247,15 +267,15 @@ describe('Hero API Routes', function() {
       res.should.be.json;
       res.body.should.be.an('object');
       res.body.should.have.property('id');
-      res.body.id.should.be.a('number');
+      res.body.id.should.equal(10);
       res.body.should.have.property('name');
-      res.body.name.should.equal('');
+      res.body.name.should.equal('Bilbo Baggins');
       res.body.should.have.property('nicknames');
-      res.body.nicknames.should.deep.equal(['The Deliverator', 'Gargoyle']);
+      res.body.nicknames.should.deep.equal([]);
       res.body.should.have.property('talent');
-      res.body.talent.should.equal('Swords');
+      res.body.talent.should.equal('Command');
       res.body.should.have.property('contact');
-      res.body.contact.should.equal('founder@metaverse.com');
+      res.body.contact.should.equal('newemail@web.net');
       res.body.should.have.property('age');
       res.body.age.should.equal(43);
       res.body.should.have.property('price');
@@ -264,6 +284,25 @@ describe('Hero API Routes', function() {
       res.body.rating.should.equal(6);
       res.body.should.have.property('level');
       res.body.level.should.equal(18);
+      done();
+      });
+    });
+
+    it('should return 400 if hero contact alreay exists', function(done) {
+      chai.request(server)
+      .post('/api/heros')
+      .send({
+        name: 'Bilbo Baggins',
+        nicknames: [],
+        talent: 'Command',
+        contact: 'barrelrider@gmail.com',
+        age: 43,
+        price: 23,
+        rating: 6,
+        level: 18
+      })
+      .end(function(err, res) {
+      res.should.have.status(400);
       done();
       });
     });
@@ -458,6 +497,21 @@ describe('Hero API Routes', function() {
       });
     });
 
+    it('should return 400 it contains an diferent and existing contact', function(done) {
+      chai.request(server)
+      .patch('/api/heros/1')
+      .send({
+        contact: 'monmothma@dungeonbase.net',
+        price: 23,
+        rating: 6,
+        level: 18
+      })
+      .end(function(err, res) {
+      res.should.have.status(400);
+      done();
+      });
+    });
+
     it('should return updated hero if id and body are valid and contain nicknames', function(done) {
       chai.request(server)
       .patch('/api/heros/1')
@@ -476,7 +530,7 @@ describe('Hero API Routes', function() {
       res.body.should.have.property('name');
       res.body.name.should.equal('Bilbo Baggins');
       res.body.should.have.property('nicknames');
-      res.body.nicknames.should.deep.equal(['Burglar', 'blarg', 'foo', 'bar']);
+      res.body.nicknames.should.deep.equal(['blarg', 'foo', 'bar']);
       res.body.should.have.property('talent');
       res.body.talent.should.equal('Theft');
       res.body.should.have.property('contact');

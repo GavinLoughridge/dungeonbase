@@ -14,21 +14,21 @@ function tableLookup(table, returnCol, valueCol, value) {
 }
 
 exports.seed = function(knex, Promise) {
-  return knex('persons').select('id', 'person_name')
-  .then(function (person_ids) {
+  return knex('persons').select('id', 'contact')
+  .then(function (id_contact) {
     let duplicateCheck = [];
     let questgivers = [];
 
     // add unique questgivers
     for (let i = 0; i < questsStrings.length; i++) {
       let quest = questsStrings[i].split(', ');
-      let name = quest[4];
+      let contact = quest[4].replace(/\s/g, '').toLowerCase().concat('@dungeonbase.net');
 
-      if (!duplicateCheck.includes(name)) {
-        duplicateCheck.push(name);
+      if (!duplicateCheck.includes(contact)) {
+        duplicateCheck.push(contact);
 
         questgivers.push({
-          person_id: tableLookup(person_ids, 'id', 'person_name', name)
+          person_id: tableLookup(id_contact, 'id', 'contact', contact)
         })
       }
     }

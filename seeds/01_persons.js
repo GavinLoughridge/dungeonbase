@@ -14,13 +14,14 @@ exports.seed = function(knex, Promise) {
   // add unique persons from hero names
   for (let i = 0; i < herosStrings.length; i++) {
     let hero = herosStrings[i].split(', ');
-    let name = hero[0];
+    let contact = hero[3];
 
-    if (!duplicateCheck.includes(name)) {
-      duplicateCheck.push(name);
+    if (!duplicateCheck.includes(contact)) {
+      duplicateCheck.push(contact);
 
       persons.push({
-        person_name: name
+        name: hero[0],
+        contact: contact
       })
     }
   }
@@ -29,11 +30,14 @@ exports.seed = function(knex, Promise) {
   for (let i = 0; i < questsStrings.length; i++) {
     let quest = questsStrings[i].split(', ');
     let name = quest[4];
-    if (!duplicateCheck.includes(name)) {
-      duplicateCheck.push(name);
+    let contact = name.replace(/\s/g, '').toLowerCase().concat('@dungeonbase.net');
+
+    if (!duplicateCheck.includes(contact)) {
+      duplicateCheck.push(contact);
 
       persons.push({
-        person_name: name
+        name: name,
+        contact: contact
       })
     }
   }

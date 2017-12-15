@@ -2,9 +2,8 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTableIfNotExists('heros', function (table) {
     table.increments();
-    table.integer('person_id').references('persons.id');
+    table.integer('person_id').references('persons.id').unique();
     table.text('talent');
-    table.text('contact');
     table.integer('age');
     table.integer('price');
     table.float('rating');

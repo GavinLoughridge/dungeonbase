@@ -12,14 +12,14 @@ exports.seed = function(knex, Promise) {
   // add unique dungeons
   for (let i = 0; i < questsStrings.length; i++) {
     let quest = questsStrings[i].split(', ');
-    // use a combinaton of dungeon name and questgiver name to check uniqueness
-    let compositeName = quest[0].concat(quest[4]);
+    // use a dungeon name to check uniqueness
+    let name = quest[0];
 
-    if (!duplicateCheck.includes(compositeName)) {
-      duplicateCheck.push(compositeName);
+    if (!duplicateCheck.includes(name)) {
+      duplicateCheck.push(name);
 
       dungeons.push({
-        dungeon_name: quest[0],
+        name: name,
         location: quest[1],
         map: quest[2],
         threat: quest[3]
