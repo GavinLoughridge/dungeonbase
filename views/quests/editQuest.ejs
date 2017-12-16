@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/head %>
+  </head>
+  <body>
+    <header>
+      <% include ../partials/header %>
+    </header>
+
+    <main>
+
+      <form action=<%= `/quests/${id}`%> method='post'>
+        Dungeon:<br>
+        <input type="text" name="dungeon" value='<%= dungeon %>'>
+        <br>
+        Location:<br>
+        <input type="text" name="location" value='<%= location %>'>
+        <br>
+        Map:<br>
+        <input type="text" name="map" value='<%= map %>'>
+        <br>
+        Threat:<br>
+        <input type="number" name="threat" value='<%= threat %>'>
+        <br>
+        Reward:<br>
+        <input type="number" name="reward" value='<%= reward %>'>
+        <br><br>
+        <input type="submit" value="Submit">
+      </form>
+
+      <a href=<%= `/quests/${id}`%>>Cancel</a>
+      <form action=<%= `/quests/${id}/delete`%> method='post'>
+        <input type="submit" value="Delete">
+      </form>
+    </main>
+
+  <footer>
+    <% include ../partials/footer %>
+  </footer>
+
+  <% include ../partials/scripts %>
+  </body>
+</html>

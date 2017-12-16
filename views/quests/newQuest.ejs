@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/head %>
+  </head>
+  <body>
+    <header>
+      <% include ../partials/header %>
+    </header>
+
+    <main>
+      <h1>NEW DUNGEON</h1>
+
+      <form action='/quests' method='post'>
+        Dungeon:<br>
+        <input type="text" name="dungeon">
+        <br>
+        Location:<br>
+        <input type="text" name="location">
+        <br>
+        Map:<br>
+        <input type="text" name="map">
+        <br>
+        Threat:<br>
+        <input type="number" name="threat">
+        <br>
+        Reward:<br>
+        <input type="number" name="reward">
+        <br><br>
+        <input type="submit" value="Submit">
+      </form>
+    </main>
+
+  <footer>
+    <% include ../partials/footer %>
+  </footer>
+
+  <% include ../partials/scripts %>
+  </body>
+</html>

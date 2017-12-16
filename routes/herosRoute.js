@@ -8,6 +8,7 @@ const knex = require('knex')({
 });
 const express = require('express');
 const router = express.Router();
+const bodyParser = require('body-parser');
 
 function fetchHeros() {
   return knex('heros')
@@ -58,14 +59,20 @@ function validBody(heroBody) {
 }
 
 router
+  .use(bodyParser.urlencoded({
+    extended: true
+  }))
   .get('/', function (req, res, next) {
     fetchHeros()
     .then(function (herosData) {
       return appendNicknames(herosData);
     })
     .then(function (herosData) {
-      res.set({'Content-Type': 'application/json'});
-      res.send(JSON.stringify(herosData));
+      res.render('heros/herosList', {herosData: herosData});
+    })
+    .catch(function (err) {
+      if (err === 404) res.sendStatus(404);
+      if (!res.headersSent) console.error(err);
     })
   })
   .get('/:hero_id', function (req, res, next) {
@@ -79,8 +86,7 @@ router
     .then(function (herosData) {
       if (herosData.length === 0) throw 404;
 
-      res.set({'Content-Type': 'application/json'});
-      res.send(JSON.stringify(herosData[0]));
+      res.render('heros/herosDetails', herosData[0]);
     })
     .catch(function (err) {
       if (err === 404) res.sendStatus(404);

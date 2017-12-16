@@ -1,25 +1,66 @@
+const PORT = process.env.PORT || 3000;
 const express = require('express');
-const bodyParser = require('body-parser');
 const app = express();
-app.use(bodyParser.json())
-app.set('view engine', 'ejs')
-
-// set up routes
+const path = require('path')
+const loginRoute = require('./routes/loginRoute');
 const herosRoute = require('./routes/herosRoute');
 const questsRoute = require('./routes/questsRoute');
 const questgiversRoute = require('./routes/questgiversRoute');
+const APIherosRoute = require('./routes/APIherosRoute');
+const APIquestsRoute = require('./routes/APIquestsRoute');
+const APIquestgiversRoute = require('./routes/APIquestgiversRoute');
+const session = require('express-session')
 
-app.use('/api/heros', herosRoute);
+app.use('/public', express.static(path.join(__dirname, '/public')));
 
-app.use('/api/quests', questsRoute);
+app.use(session({
+  secret: 'uL30nZDNyMWcCq5wCaDV',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    secure: false
+  }
+}))
 
-app.use('/api/questgivers', questgiversRoute);
+app.use(function (req, res, next) {
+  console.log('session is:', req.session);
+
+  next();
+});
+
+app.set('view engine', 'ejs')
+
+app.use('/login', loginRoute);
+
+app.use(function (req, res, next) {
+  if(!req.session.user) {
+    res.redirect('/login')
+  }
+
+  next();
+});
+
+app.get('/', function (req, res) {
+  res.redirect('/quests')
+})
+
+app.use('/heros', herosRoute);
+
+app.use('/quests', questsRoute);
+
+app.use('/questgivers', questgiversRoute);
+
+app.use('/api/heros', APIherosRoute);
+
+app.use('/api/quests', APIquestsRoute);
+
+app.use('/api/questgivers', APIquestgiversRoute);
 
 // if another route has not sent a respons, send 'not found'
 app.use(function (req, res) {
   if (!res.headersSent) res.sendStatus(404);
 })
 
-app.listen(3000)
+app.listen(PORT, function () {console.log('listening on port', PORT)})
 
 module.exports = app;

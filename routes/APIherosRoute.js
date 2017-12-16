@@ -8,6 +8,7 @@ const knex = require('knex')({
 });
 const express = require('express');
 const router = express.Router();
+const bodyParser = require('body-parser');
 
 function fetchHeros() {
   return knex('heros')
@@ -58,6 +59,7 @@ function validBody(heroBody) {
 }
 
 router
+  .use(bodyParser.json())
   .get('/', function (req, res, next) {
     fetchHeros()
     .then(function (herosData) {

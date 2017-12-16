@@ -8,14 +8,20 @@ const knex = require('knex')({
 });
 const express = require('express');
 const router = express.Router();
+const bodyParser = require('body-parser');
 
-function fetchQuests() {
+function fetchQuests(req) {
   return knex('quests')
   .join('dungeons', 'dungeons.id', 'quests.dungeon_id')
   .join('questgivers', 'questgivers.id', 'quests.questgiver_id')
   .join('persons as questgivers_persons', 'questgivers_persons.id', 'questgivers.person_id')
   .leftJoin('persons as completed_by_persons', 'completed_by_persons.id', 'quests.completed_by')
-  .select({id: 'quests.id'}, {dungeon: 'dungeons.name'}, 'location', 'map', 'threat', {questgiver: 'questgivers_persons.name'}, 'reward', 'completed', {completed_by: 'completed_by_persons.name'});
+  .select({id: 'quests.id'}, {dungeon: 'dungeons.name'}, 'location', 'map', 'threat', {questgiver: 'questgivers_persons.name'}, 'reward', 'completed', {completed_by: 'completed_by_persons.name'})
+  .modify(function (queryBuilder) {
+    if (!req.session.roles.includes('hero')) {
+      queryBuilder.where('questgivers_persons.contact', req.session.user)
+    }
+  });
 }
 
 function validBody(questBody) {
@@ -39,25 +45,61 @@ function validBody(questBody) {
 }
 
 router
+  .use(bodyParser.urlencoded({
+    extended: true
+  }))
+  .use(function (req, res, next) {
+    req.body.contact = req.session.user;
+
+    next();
+  })
+  .use(function (req, res, next) {
+    if (typeof req.body.threat != 'undefined') req.body.threat = parseInt(req.body.threat);
+    if (typeof req.body.reward != 'undefined') req.body.reward = parseInt(req.body.reward);
+
+    next();
+  })
   .get('/', function (req, res, next) {
-    fetchQuests()
+
+    fetchQuests(req)
     .then(function (questsData) {
-      res.set({'Content-Type': 'application/json'});
-      res.send(JSON.stringify(questsData));
+      res.render('quests/questsList', {
+        questsData: questsData,
+        questgiver: req.session.roles.includes('questgiver')
+      });
     })
   })
-  .get('/:quest_id', function (req, res, next) {
+  .get('/new', function (req, res, next) {
+    res.render('quests/newQuest')
+  })
+  .get('/:quest_id/:edit?', function (req, res, next) {
     if (isNaN(parseInt(req.params.quest_id))) throw 400;
 
-    fetchQuests()
+    if (typeof req.params.edit != 'undefined' && req.params.edit != 'edit') throw 400;
+
+    fetchQuests(req)
+    .modify(function (queryBuilder) {
+      if (req.session.roles.includes('questgiver')) {
+        queryBuilder.select('questgivers_persons.contact');
+      }
+    })
     .where('quests.id', req.params.quest_id)
     .then(function (questsData) {
       if (questsData.length === 0) throw 404;
 
-      res.set({'Content-Type': 'application/json'});
-      res.send(JSON.stringify(questsData[0]));
+      questsData[0].editable = (typeof questsData[0].contact != 'undefined' && questsData[0].contact === req.session.user);
+
+      questsData[0].hero = (req.session.roles.includes('hero'));
+
+      if (req.params.edit === 'edit') {
+        if (!questsData[0].editable) throw 400;
+        res.render('quests/editQuest', questsData[0]);
+      } else {
+        res.render('quests/questsDetails', questsData[0]);
+      }
     })
     .catch(function (err) {
+      if (err === 400) res.sendStatus(400);
       if (err === 404) res.sendStatus(404);
       if (!res.headersSent) console.error(err);
     })
@@ -69,7 +111,7 @@ router
           throw 400;
         }
 
-    fetchQuests()
+    fetchQuests(req)
     .where('questgivers_persons.contact', quest.contact)
     .andWhere('dungeons.name', quest.dungeon)
     .then(function (questsData) {
@@ -118,13 +160,7 @@ router
       .returning('id')
     })
     .then(function (quest_id) {
-      return fetchQuests().where('quests.id', quest_id[0])
-    })
-    .then(function (questsData) {
-      if (questsData.length === 0) throw 404;
-
-      res.set({'Content-Type': 'application/json'});
-      res.send(JSON.stringify(questsData[0]));
+      res.redirect(`/quests/${quest_id[0]}`)
     })
     .catch(function (err) {
       if (err === 400) res.sendStatus(400);
@@ -132,12 +168,12 @@ router
       if (!res.headersSent) console.error(err);
     })
   })
-  .patch('/:quest_id', function (req, res, next) {
+  .post('/:quest_id', function (req, res, next) {
     let quest = req.body;
 
     if (!validBody(quest)) throw 400;
 
-    fetchQuests()
+    fetchQuests(req)
     .select('questgivers_persons.contact')
     .select({dungeon_id: 'dungeons.id'})
     .where('quests.id', req.params.quest_id)
@@ -196,14 +232,7 @@ router
       .returning('id')
     })
     .then(function (quest_id) {
-      return fetchQuests()
-      .where('quests.id', quest_id[0])
-    })
-    .then(function (questsData) {
-      if (questsData.length === 0) throw 404;
-
-      res.set({'Content-Type': 'application/json'});
-      res.send(JSON.stringify(questsData[0]));
+      res.redirect(`/quests/${quest_id[0]}`)
     })
     .catch(function (err) {
       if (err === 400) res.sendStatus(400);
@@ -211,10 +240,12 @@ router
       if (!res.headersSent) console.error(err);
     })
   })
-  .delete('/:quest_id', function (req, res, next) {
+  .post('/:quest_id/:del', function (req, res, next) {
     if (isNaN(parseInt(req.params.quest_id))) throw 400;
 
-    fetchQuests()
+    if (typeof req.params.del != 'undefined' && req.params.del != 'delete') return next();
+
+    fetchQuests(req)
     .where('quests.id', req.params.quest_id)
     .then(function (questsData) {
       if (questsData.length === 0) throw 404;
@@ -226,8 +257,42 @@ router
       .where('id', req.params.quest_id)
     })
     .then(function () {
-      res.set({'Content-Type': 'application/json'});
-      res.send(JSON.stringify(res.locals.quest));
+      res.redirect('/quests')
+    })
+    .catch(function (err) {
+      if (err === 404) res.sendStatus(404);
+      if (!res.headersSent) console.error(err);
+    })
+  })
+  .post('/:quest_id/:complete', function (req, res, next) {
+    if (isNaN(parseInt(req.params.quest_id))) throw 400;
+
+    if (typeof req.params.complete != 'undefined' && req.params.complete != 'complete') throw 400;
+
+    if (!req.session.roles.includes('hero')) throw 400;
+
+    fetchQuests(req)
+    .where('quests.id', req.params.quest_id)
+    .then(function (questsData) {
+      if (questsData.length === 0) throw 404;
+
+      res.locals.quest = questsData[0];
+
+      return knex('persons')
+      .select('id')
+      .where('contact', req.session.user)
+    })
+    .then(function (person_id) {
+
+      return knex('quests')
+      .update({
+        completed: true,
+        completed_by: person_id[0].id
+      })
+      .where('id', req.params.quest_id)
+    })
+    .then(function () {
+      res.redirect(`/quests/${req.params.quest_id}`)
     })
     .catch(function (err) {
       if (err === 404) res.sendStatus(404);

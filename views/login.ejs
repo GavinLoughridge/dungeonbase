@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include partials/head %>
+  </head>
+  <body>
+    <main>
+      <h1>LOGIN</h1>
+
+      <% if (repeat) { %>
+          <h3>Sorry, that is not a valid login<h3>
+      <% } %>
+
+      <form action='/login' method='post'>
+        User:<br>
+        <input type="text" name="user">
+        <br><br>
+        <input type="submit" value="Submit">
+      </form>
+    </main>
+
+  <footer>
+    <% include partials/footer %>
+  </footer>
+
+  <% include partials/scripts %>
+  <script type="text/javascript" src="/public/js/index.js"></script>
+  </body>
+</html>

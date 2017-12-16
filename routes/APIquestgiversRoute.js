@@ -8,6 +8,7 @@ const knex = require('knex')({
 });
 const express = require('express');
 const router = express.Router();
+const bodyParser = require('body-parser');
 
 function validBody(questgiverBody) {
   return (
@@ -22,6 +23,7 @@ function validBody(questgiverBody) {
 }
 
 router
+  .use(bodyParser.json())
   .get(/(.*?)/, function (req, res) {
     throw 405;
   })

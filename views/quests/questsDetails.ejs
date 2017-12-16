@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/head %>
+  </head>
+  <body>
+    <header>
+      <% include ../partials/header %>
+    </header>
+
+    <main>
+      <p><%= dungeon %><p>
+      <p>Quest ID: <%= id %><p>
+      <p>Location: <%= location %></p>
+      <p>map: <%= map %></p>
+      <p>threat: <%= threat %></p>
+      <p>questgiver: <%= questgiver %></p>
+      <p>reward: <%= reward %></p>
+      <% if (completed) { %>
+        <p>completed by: <%= completed_by %></p>
+      <% } else { %>
+        <p>not completed</p>
+      <% } %>
+
+      <% if (editable) { %>
+        <a href=<%= `/quests/${id}/edit`%>>Edit</a>
+      <% } %>
+      <% if (hero && !completed) { %>
+        <form action=<%= `/quests/${id}/complete`%> method='post'>
+          <input type="submit" value="Complete">
+        </form>
+      <% } %>
+    </main>
+
+  <footer>
+    <% include ../partials/footer %>
+  </footer>
+
+  <% include ../partials/scripts %>
+  </body>
+</html>
