@@ -14,12 +14,12 @@ function fetchQuests(req) {
   return knex('quests')
   .join('dungeons', 'dungeons.id', 'quests.dungeon_id')
   .join('questgivers', 'questgivers.id', 'quests.questgiver_id')
-  .join('persons as questgivers_persons', 'questgivers_persons.id', 'questgivers.person_id')
-  .leftJoin('persons as completed_by_persons', 'completed_by_persons.id', 'quests.completed_by')
-  .select({id: 'quests.id'}, {dungeon: 'dungeons.name'}, 'location', 'map', 'threat', {questgiver: 'questgivers_persons.name'}, 'reward', 'completed', {completed_by: 'completed_by_persons.name'})
+  .join('users as questgivers_users', 'questgivers_users.id', 'questgivers.user_id')
+  .leftJoin('users as completed_by_users', 'completed_by_users.id', 'quests.completed_by')
+  .select({id: 'quests.id'}, {dungeon: 'dungeons.name'}, 'location', 'map', 'threat', {questgiver: 'questgivers_users.name'}, 'reward', 'completed', {completed_by: 'completed_by_users.name'})
   .modify(function (queryBuilder) {
     if (!req.session.roles.includes('hero')) {
-      queryBuilder.where('questgivers_persons.contact', req.session.user)
+      queryBuilder.where('questgivers_users.email', req.session.user)
     }
   });
 }
@@ -38,7 +38,7 @@ function validBody(questBody) {
     (typeof questBody.location === 'string'),
     (typeof questBody.map === 'string'),
     (Number.isInteger(questBody.threat)),
-    (typeof questBody.contact === 'string'),
+    (typeof questBody.email === 'string'),
     (Number.isInteger(questBody.reward)),
     ].filter((test) => test).length
   );
@@ -49,7 +49,7 @@ router
     extended: true
   }))
   .use(function (req, res, next) {
-    req.body.contact = req.session.user;
+    req.body.email = req.session.user;
 
     next();
   })
@@ -80,14 +80,14 @@ router
     fetchQuests(req)
     .modify(function (queryBuilder) {
       if (req.session.roles.includes('questgiver')) {
-        queryBuilder.select('questgivers_persons.contact');
+        queryBuilder.select('questgivers_users.email');
       }
     })
     .where('quests.id', req.params.quest_id)
     .then(function (questsData) {
       if (questsData.length === 0) throw 404;
 
-      questsData[0].editable = (typeof questsData[0].contact != 'undefined' && questsData[0].contact === req.session.user);
+      questsData[0].editable = (typeof questsData[0].email != 'undefined' && questsData[0].email === req.session.user);
 
       questsData[0].hero = (req.session.roles.includes('hero'));
 
@@ -112,15 +112,15 @@ router
         }
 
     fetchQuests(req)
-    .where('questgivers_persons.contact', quest.contact)
+    .where('questgivers_users.email', quest.email)
     .andWhere('dungeons.name', quest.dungeon)
     .then(function (questsData) {
       if (questsData.length > 0) throw 400;
 
       return knex('questgivers')
-      .join('persons', 'persons.id', 'questgivers.person_id')
+      .join('users', 'users.id', 'questgivers.user_id')
       .select('questgivers.id')
-      .where('persons.contact', quest.contact)
+      .where('users.email', quest.email)
     })
     .then(function (questgiver_id) {
       if (questgiver_id.length === 0) throw 400;
@@ -174,7 +174,7 @@ router
     if (!validBody(quest)) throw 400;
 
     fetchQuests(req)
-    .select('questgivers_persons.contact')
+    .select('questgivers_users.email')
     .select({dungeon_id: 'dungeons.id'})
     .where('quests.id', req.params.quest_id)
     .then(function (questsData) {
@@ -182,12 +182,12 @@ router
 
       if (questsData.length === 0) throw 404;
 
-      if (typeof quest.contact != 'undefined' &&
-          quest.contact != questsData[0].contact) {
+      if (typeof quest.email != 'undefined' &&
+          quest.email != questsData[0].email) {
             throw 400
           }
 
-      delete quest.contact;
+      delete quest.email;
 
       if (typeof quest.dungeon === 'string') {
         return knex('dungeons')
@@ -278,16 +278,16 @@ router
 
       res.locals.quest = questsData[0];
 
-      return knex('persons')
+      return knex('users')
       .select('id')
-      .where('contact', req.session.user)
+      .where('email', req.session.user)
     })
-    .then(function (person_id) {
+    .then(function (user_id) {
 
       return knex('quests')
       .update({
         completed: true,
-        completed_by: person_id[0].id
+        completed_by: user_id[0].id
       })
       .where('id', req.params.quest_id)
     })

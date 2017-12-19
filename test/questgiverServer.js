@@ -60,7 +60,7 @@ describe('Questgiver API Routes', function() {
       .post('/api/questgivers')
       .send({
         name: 'Hiro Protagonist',
-        contact: 'founder@metaverse.com'
+        email: 'founder@metaverse.com'
       })
       .end(function(err, res) {
       res.should.have.status(200);
@@ -68,8 +68,8 @@ describe('Questgiver API Routes', function() {
       res.body.should.be.an('object');
       res.body.should.have.property('name');
       res.body.name.should.equal('Hiro Protagonist');
-      res.body.should.have.property('contact');
-      res.body.contact.should.equal('founder@metaverse.com');
+      res.body.should.have.property('email');
+      res.body.email.should.equal('founder@metaverse.com');
       done();
       });
     });
@@ -78,7 +78,7 @@ describe('Questgiver API Routes', function() {
       chai.request(server)
       .post('/api/questgivers')
       .send({
-        contact: 'founder@metaverse.com'
+        email: 'founder@metaverse.com'
       })
       .end(function(err, res) {
       res.should.have.status(400);
@@ -86,7 +86,7 @@ describe('Questgiver API Routes', function() {
       });
     });
 
-    it('should return 400 if contact is missing', function(done) {
+    it('should return 400 if email is missing', function(done) {
       chai.request(server)
       .post('/api/questgivers')
       .send({
@@ -98,11 +98,11 @@ describe('Questgiver API Routes', function() {
       });
     });
 
-    it('should return 400 if contact is existing questgiver person', function(done) {
+    it('should return 400 if email is existing questgiver user', function(done) {
       chai.request(server)
       .post('/api/questgivers')
       .send({
-        contact: 'monmothma@dungeonbase.net'
+        email: 'monmothma@dungeonbase.net'
       })
       .end(function(err, res) {
       res.should.have.status(400);
@@ -110,12 +110,12 @@ describe('Questgiver API Routes', function() {
       });
     });
 
-    it('should return new questgiver object if contact is existing hero person', function(done) {
+    it('should return new questgiver object if email is existing hero user', function(done) {
       chai.request(server)
       .post('/api/questgivers')
       .send({
         name: 'Bilbo Baggins',
-        contact: 'barrelrider@gmail.com'
+        email: 'barrelrider@gmail.com'
       })
       .end(function(err, res) {
       res.should.have.status(200);
@@ -123,8 +123,8 @@ describe('Questgiver API Routes', function() {
       res.body.should.be.an('object');
       res.body.should.have.property('name');
       res.body.name.should.equal('Bilbo Baggins');
-      res.body.should.have.property('contact');
-      res.body.contact.should.equal('barrelrider@gmail.com');
+      res.body.should.have.property('email');
+      res.body.email.should.equal('barrelrider@gmail.com');
       done();
       });
     });
@@ -135,7 +135,7 @@ describe('Questgiver API Routes', function() {
       .send({
         name: 'Hiro Protagonist',
         talent: 'Swords',
-        contact: 'founder@metaverse.com'
+        email: 'founder@metaverse.com'
       })
       .end(function(err, res) {
       res.should.have.status(400);
@@ -148,7 +148,7 @@ describe('Questgiver API Routes', function() {
       .post('/api/questgivers')
       .send({
         name: 'Hiro Protagonist',
-        contact: 17
+        email: 17
       })
       .end(function(err, res) {
       res.should.have.status(400);

@@ -1,16 +1,19 @@
+// setup requierments
 const PORT = process.env.PORT || 3000;
 const express = require('express');
 const app = express();
 const path = require('path')
+const session = require('express-session')
+const bodyParser = require('body-parser');
+
+// setup routes
 const loginRoute = require('./routes/loginRoute');
+const signupRoute = require('./routes/signupRoute');
 const herosRoute = require('./routes/herosRoute');
 const questsRoute = require('./routes/questsRoute');
 const questgiversRoute = require('./routes/questgiversRoute');
-const APIherosRoute = require('./routes/APIherosRoute');
-const APIquestsRoute = require('./routes/APIquestsRoute');
-const APIquestgiversRoute = require('./routes/APIquestgiversRoute');
-const session = require('express-session')
 
+// setup middleware
 app.use('/public', express.static(path.join(__dirname, '/public')));
 
 app.use(session({
@@ -22,26 +25,37 @@ app.use(session({
   }
 }))
 
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+
+app.set('view engine', 'ejs')
+
 app.use(function (req, res, next) {
   console.log('session is:', req.session);
 
   next();
 });
 
-app.set('view engine', 'ejs')
+// route requests
+app.use('/signup', signupRoute);
 
 app.use('/login', loginRoute);
 
 app.use(function (req, res, next) {
-  if(!req.session.user) {
+  if(!req.session.email) {
+    console.log('redirecting');
     res.redirect('/login')
+  } else {
+    console.log('not redirecting');
+    next();
   }
-
-  next();
 });
 
 app.get('/', function (req, res) {
-  res.redirect('/quests')
+  console.log('redering index');
+  res.render('index');
+  //res.redirect('/quests')
 })
 
 app.use('/heros', herosRoute);
@@ -50,13 +64,7 @@ app.use('/quests', questsRoute);
 
 app.use('/questgivers', questgiversRoute);
 
-app.use('/api/heros', APIherosRoute);
-
-app.use('/api/quests', APIquestsRoute);
-
-app.use('/api/questgivers', APIquestgiversRoute);
-
-// if another route has not sent a respons, send 'not found'
+// if another route has not sent a response, send 'not found'
 app.use(function (req, res) {
   if (!res.headersSent) res.sendStatus(404);
 })

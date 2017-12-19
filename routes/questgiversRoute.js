@@ -18,7 +18,7 @@ function validBody(questgiverBody) {
     (questgiverBody.constructor === Object) &&
     (Object.keys(questgiverBody).length === 2) &&
     (typeof questgiverBody.name === 'string') &&
-    (typeof questgiverBody.contact === 'string')
+    (typeof questgiverBody.email === 'string')
   );
 }
 
@@ -35,35 +35,35 @@ router
     if (!validBody(questgiver)) throw 400;
 
     knex('questgivers')
-    .join('persons', 'persons.id', 'person_id')
-    .where('persons.contact', questgiver.contact)
+    .join('users', 'users.id', 'user_id')
+    .where('users.email', questgiver.email)
     .then(function (questgiversData) {
       if (questgiversData.length > 0) throw 400;
 
-      return knex('persons')
+      return knex('users')
       .select('id', 'name')
-      .where('contact', questgiver.contact)
+      .where('email', questgiver.email)
     })
-    .then(function (personsData) {
-      if (personsData.length > 0) {
-        if (questgiver.name != personsData[0].name) throw 400;
+    .then(function (usersData) {
+      if (usersData.length > 0) {
+        if (questgiver.name != usersData[0].name) throw 400;
 
-        return [personsData[0].id]
+        return [usersData[0].id]
       } else {
-        return knex('persons')
+        return knex('users')
         .insert(questgiver)
         .returning('id')
       }
     })
-    .then(function (person_id) {
+    .then(function (user_id) {
       return knex('questgivers')
-      .insert({person_id: person_id[0]})
+      .insert({user_id: user_id[0]})
       .returning('id')
     })
     .then(function (questgiver_id) {
       return knex('questgivers')
-      .join('persons', 'persons.id', 'questgivers.person_id')
-      .select('name', 'contact')
+      .join('users', 'users.id', 'questgivers.user_id')
+      .select('name', 'email')
       .where('questgivers.id', questgiver_id[0])
     })
     .then(function (questgiverData) {

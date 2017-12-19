@@ -8,46 +8,66 @@ const knex = require('knex')({
 });
 const express = require('express');
 const router = express.Router();
+const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 
-function validBody(loginBody) {
+function validBody(signupBody) {
   return (
     // loginBody must be an object with two keys
-    typeof loginBody === 'object' &&
-    loginBody.constructor === Object &&
-    Object.keys(loginBody).length === 2 &&
+    typeof signupBody === 'object' &&
+    signupBody.constructor === Object &&
+    Object.keys(signupBody).length === 9 &&
     // email and password values must be strings
-    typeof loginBody.email === 'string' &&
-    typeof loginBody.password === 'string'
-  );
+    typeof signupBody.email === 'string' &&
+    typeof signupBody.password === 'string' &&
+    typeof signupBody.name === 'string' &&
+    typeof signupBody.role === 'string' &&
+    typeof signupBody.nicknames === 'string' &&
+    typeof signupBody.talent === 'string' &&
+    typeof signupBody.age === 'string' &&
+    typeof signupBody.price === 'string' &&
+    typeof signupBody.rating === 'string' &&
+    typeof signupBody.level === 'string'
+  )
 }
 
 router
   .get('/', function (req, res) {
-    delete req.session.email;
-    delete req.session.roles;
-
-    res.render('login', {repeat: false});
+    res.render('signup', {repeat: false});
   })
   .post('/', function (req, res, next) {
-    console.log('recived login info:', req.body);
+    // req.body = formatBody(req.body);
+
+
+    console.log('body was', req.body);
 
     if (!validBody(req.body)) throw 400;
 
-    console.log('valid body');
+    req.body.questgiver = req.body.role;
 
     knex('users')
     .where('email', req.body.email)
     .then(function (usersData) {
-      if (usersData.length === 0) throw 400;
-      user = usersData[0];
+      if (usersData.length != 0) throw 400;
 
-      console.log('found user:', user);
+      return knex('users')
+      .insert({
+        name: req.body.name,
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password, salt)
+      })
+      .returning('id')
+    })
+    .then(function (usersData) {
+      if (usersData.length === 0) throw 400;
+      req.body.person_id = usersData[0].id;
+
+      //if (req.body.role === 'questgiver' || req.body.role === 'both')
+    })
+    .then(function() {
 
       if (!bcrypt.compareSync(req.body.password, user.password)) throw 400;
-
-      console.log('valid password');
 
       req.session.email = user.email;
 

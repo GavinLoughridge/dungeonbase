@@ -15,6 +15,6 @@ exports.seed = function(knex, Promise) {
       return knex('heros').del();
     })
     .then(function() {
-      return knex('persons').del();
+      return knex('users').del();
     })
 };

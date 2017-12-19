@@ -14,21 +14,21 @@ function tableLookup(table, returnCol, valueCol, value) {
 }
 
 exports.seed = function(knex, Promise) {
-  return knex('persons').select('id', 'contact')
-  .then(function (id_contact) {
+  return knex('users').select('id', 'email')
+  .then(function (id_email) {
     let duplicateCheck = [];
     let heros = [];
 
     // add unique heros
     for (let i = 0; i < herosStrings.length; i++) {
       let hero = herosStrings[i].split(', ');
-      let contact = hero[3];
+      let email = hero[3];
 
-      if (!duplicateCheck.includes(contact)) {
-        duplicateCheck.push(contact);
+      if (!duplicateCheck.includes(email)) {
+        duplicateCheck.push(email);
 
         heros.push({
-          person_id: tableLookup(id_contact, 'id', 'contact', contact),
+          user_id: tableLookup(id_email, 'id', 'email', email),
           talent: hero[2],
           age: hero[4],
           price: hero[5],

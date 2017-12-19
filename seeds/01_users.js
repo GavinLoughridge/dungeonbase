@@ -2,6 +2,8 @@
 const fs = require('fs');
 const herosFile = fs.readFileSync('./data/Heros.csv','utf8');
 const questsFile = fs.readFileSync('./data/Quests.csv','utf8');
+const bcrypt = require('bcryptjs');
+const salt = bcrypt.genSaltSync(10);
 
 // Split files into arrays of strings
 let herosStrings = herosFile.replace(/"/gi, '').split('\n').slice(1,-1);
@@ -9,39 +11,41 @@ let questsStrings = questsFile.replace(/"/gi, '').split('\n').slice(1,-1);
 
 exports.seed = function(knex, Promise) {
   let duplicateCheck = [];
-  let persons = [];
+  let users = [];
 
-  // add unique persons from hero names
+  // add unique users from hero names
   for (let i = 0; i < herosStrings.length; i++) {
     let hero = herosStrings[i].split(', ');
-    let contact = hero[3];
+    let email = hero[3];
 
-    if (!duplicateCheck.includes(contact)) {
-      duplicateCheck.push(contact);
+    if (!duplicateCheck.includes(email)) {
+      duplicateCheck.push(email);
 
-      persons.push({
+      users.push({
         name: hero[0],
-        contact: contact
+        email: email,
+        password: bcrypt.hashSync('hero', salt)
       })
     }
   }
 
-  // add unique persons from questgiver names
+  // add unique users from questgiver names
   for (let i = 0; i < questsStrings.length; i++) {
     let quest = questsStrings[i].split(', ');
     let name = quest[4];
-    let contact = name.replace(/\s/g, '').toLowerCase().concat('@dungeonbase.net');
+    let email = name.replace(/\s/g, '').toLowerCase().concat('@dungeonbase.net');
 
-    if (!duplicateCheck.includes(contact)) {
-      duplicateCheck.push(contact);
+    if (!duplicateCheck.includes(email)) {
+      duplicateCheck.push(email);
 
-      persons.push({
+      users.push({
         name: name,
-        contact: contact
+        email: email,
+        password: bcrypt.hashSync('quest', salt)
       })
     }
   }
 
-  // insert persons into persons table
-  return knex('persons').insert(persons);
+  // insert users into users table
+  return knex('users').insert(users);
 };

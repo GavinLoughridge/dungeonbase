@@ -5,25 +5,22 @@
   </head>
   <body>
     <main>
-      <h1>LOGIN</h1>
+      <div class='container'>
+        <h3>User Login</h3>
 
-      <% if (repeat) { %>
-          <h3>Sorry, that is not a valid login<h3>
-      <% } %>
+        <form action='/login' method='post'>
+          Email:<br>
+          <input type="text" name="email">
+          <br>
+          Password:<br>
+          <input type="password" name="password">
+          <br><br>
+          <input type="submit" value="LOG IN">
+        </form>
 
-      <form action='/login' method='post'>
-        User:<br>
-        <input type="text" name="user">
-        <br><br>
-        <input type="submit" value="Submit">
-      </form>
+        <a href='/signup'>create account</a>
+      </div>
     </main>
 
-  <footer>
-    <% include partials/footer %>
-  </footer>
-
   <% include partials/scripts %>
-  <script type="text/javascript" src="/public/js/index.js"></script>
-  </body>
 </html>

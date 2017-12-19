@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include partials/head %>
+  </head>
+  <body>
+    <main>
+      <div class="container">
+        <div class='row'>
+          <h3>Required information for all users:</h3>
+          <form id='signupForm' class='col s12' action='/signup' method='post'>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="email" type="text" name="email">
+                <label for="email">Email</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="password" type="password" name="password">
+                <label for="password">Password</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="passwordConf" type="password" name="passwordConf">
+                <label for="passwordConf">Confirm Password</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="name" type="text" name="name">
+                <label for="name">Full Name</label>
+              </div>
+            </div>
+            <!-- <div class="row">
+              <div class="input-field col s12">
+                <select name="selectValue">
+                  <option value="" disabled selected>Choose one...</option>
+                  <option value="one">One</option>
+                  <option value="two">Two</option>
+                  <option value="three">Three</option>
+                </select>
+                <label>Select Input</label>
+              </div>
+            </div> -->
+            <p>
+              Acount type:
+            </p>
+            <p>
+              <input type="checkbox" class="filled-in" id="questgiver" name="questgiver"/>
+              <label for="questgiver">Questgiver</label>
+            </p>
+            <p>
+              <input type="checkbox" class="filled-in" id="hero" name="hero" onclick="toggleFields();"/>
+              <label for="hero">Hero</label>
+            </p>
+            <div id="heroFields" style="display: none;">
+              <h3>Required information for heros:</h3>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="nicknames" type="text" name="nicknames">
+                  <label for="nicknames">Nicknames</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="talent" type="text" name="talent">
+                  <label for="talent">Talent</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="age" type="number" name="age">
+                  <label for="age">Age</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="price" type="number" name="price">
+                  <label for="price">Price</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="rating" type="number" name="rating" step="0.1">
+                  <label for="rating">Rating</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="level" type="number" name="level">
+                  <label for="level">Level</label>
+                </div>
+              </div>
+            </div>
+            <button class="btn" type="button" onclick="checkInput();">Create Account</button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+  <% include partials/scripts %>
+  <script type="text/javascript" src="/public/js/signup.js"></script>
+</html>

@@ -140,7 +140,7 @@ describe('Quest API Routes', function() {
         location: 'space',
         map: 'tbd',
         threat: 7,
-        contact: 'almacoin@dungeonbase.net',
+        email: 'almacoin@dungeonbase.net',
         reward: 50
       })
       .end(function(err, res) {
@@ -177,7 +177,7 @@ describe('Quest API Routes', function() {
         location: 'space',
         map: 'tbd',
         threat: 7,
-        contact: 'almacoin@dungeonbase.net',
+        email: 'almacoin@dungeonbase.net',
         reward: 50
       })
       .end(function(err, res) {
@@ -186,7 +186,7 @@ describe('Quest API Routes', function() {
       });
     });
 
-    it('should return 400 if questgiver contact does not exist', function(done) {
+    it('should return 400 if questgiver email does not exist', function(done) {
       chai.request(server)
       .post('/api/quests')
       .send({
@@ -194,7 +194,7 @@ describe('Quest API Routes', function() {
         location: 'space',
         map: 'tbd',
         threat: 7,
-        contact: 'bob@dungeonbase.net',
+        email: 'bob@dungeonbase.net',
         reward: 50
       })
       .end(function(err, res) {
@@ -211,7 +211,7 @@ describe('Quest API Routes', function() {
         location: 'space',
         map: 100,
         threat: 7,
-        contact: 'almacoin@dungeonbase.net',
+        email: 'almacoin@dungeonbase.net',
         reward: 50
       })
       .end(function(err, res) {
@@ -228,7 +228,7 @@ describe('Quest API Routes', function() {
         location: 'space',
         map: 'tbd',
         threat: 7,
-        contact: 'almacoin@dungeonbase.net',
+        email: 'almacoin@dungeonbase.net',
         reward: 50,
         name: 'john'
       })
@@ -246,7 +246,7 @@ describe('Quest API Routes', function() {
         location: 'space',
         map: 'tbd',
         threat: 'john',
-        contact: 'almacoin@dungeonbase.net',
+        email: 'almacoin@dungeonbase.net',
         reward: 50
       })
       .end(function(err, res) {
@@ -283,7 +283,7 @@ describe('Quest API Routes', function() {
         location: 'space',
         map: 'tbd',
         threat: 7,
-        contact: 'almacoin@dungeonbase.net',
+        email: 'almacoin@dungeonbase.net',
         reward: 50
       })
       .end(function(err, res) {
@@ -292,11 +292,11 @@ describe('Quest API Routes', function() {
       });
     });
 
-    it('should return 400 if body contains contact change', function(done) {
+    it('should return 400 if body contains email change', function(done) {
       chai.request(server)
       .patch('/api/quests/1')
       .send({
-        contact: 'almacoin@dungeonbase.net'
+        email: 'almacoin@dungeonbase.net'
       })
       .end(function(err, res) {
       res.should.have.status(400);
@@ -304,11 +304,11 @@ describe('Quest API Routes', function() {
       });
     });
 
-    it('should return updated quest if body contains same contact', function(done) {
+    it('should return updated quest if body contains same email', function(done) {
       chai.request(server)
       .patch('/api/quests/1')
       .send({
-        contact: 'gandalfthegrey@dungeonbase.net',
+        email: 'gandalfthegrey@dungeonbase.net',
         reward: 2
       })
       .end(function(err, res) {
@@ -341,7 +341,7 @@ describe('Quest API Routes', function() {
       chai.request(server)
       .patch('/api/quests/0')
       .send({
-        contact: 'almacoin@dungeonbase.net',
+        email: 'almacoin@dungeonbase.net',
         reward: 50
       })
       .end(function(err, res) {

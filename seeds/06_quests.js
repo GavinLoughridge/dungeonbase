@@ -14,23 +14,23 @@ function tableLookup(table, returnCol, valueCol, value) {
 }
 
 exports.seed = function(knex, Promise) {
-  return knex('dungeons').crossJoin('questgivers').join('persons','questgivers.person_id','persons.id').select({dungeon_id: 'dungeons.id'}, {dungeon_name: 'dungeons.name'}, {questgiver_id: 'questgivers.id'}, {questgiver_contact: 'persons.contact'})
-  .then(function (dungeonId_name_questgiverId_contact) {
+  return knex('dungeons').crossJoin('questgivers').join('users','questgivers.user_id','users.id').select({dungeon_id: 'dungeons.id'}, {dungeon_name: 'dungeons.name'}, {questgiver_id: 'questgivers.id'}, {questgiver_email: 'users.email'})
+  .then(function (dungeonId_name_questgiverId_email) {
     let duplicateCheck = [];
     let quests = [];
 
     // add unique quests
     for (let i = 0; i < questsStrings.length; i++) {
       let quest = questsStrings[i].split(', ');
-      // use a combinaton of dungeon name and questgiver contact to check uniqueness
+      // use a combinaton of dungeon name and questgiver email to check uniqueness
       let compositeName = quest[0].concat(quest[4].replace(/\s/g, '').toLowerCase().concat('@dungeonbase.net'));
 
       if (!duplicateCheck.includes(compositeName)) {
         duplicateCheck.push(compositeName);
 
         quests.push({
-          questgiver_id: tableLookup(dungeonId_name_questgiverId_contact, 'questgiver_id', 'questgiver_contact', quest[4].replace(/\s/g, '').toLowerCase().concat('@dungeonbase.net')),
-          dungeon_id: tableLookup(dungeonId_name_questgiverId_contact, 'dungeon_id', 'dungeon_name', quest[0]),
+          questgiver_id: tableLookup(dungeonId_name_questgiverId_email, 'questgiver_id', 'questgiver_email', quest[4].replace(/\s/g, '').toLowerCase().concat('@dungeonbase.net')),
+          dungeon_id: tableLookup(dungeonId_name_questgiverId_email, 'dungeon_id', 'dungeon_name', quest[0]),
           reward: quest[5]
         })
       }

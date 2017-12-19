@@ -12,8 +12,8 @@ const bodyParser = require('body-parser');
 
 function fetchHeros() {
   return knex('heros')
-  .join('persons', 'persons.id', 'heros.person_id')
-  .select({id: 'heros.id'}, 'name', 'talent', 'contact', 'age', 'price', 'rating', 'level');
+  .join('users', 'users.id', 'heros.user_id')
+  .select({id: 'heros.id'}, 'name', 'talent', 'email', 'age', 'price', 'rating', 'level');
 }
 
 function appendNicknames(herosData) {
@@ -49,7 +49,7 @@ function validBody(heroBody) {
     (heroBody.nicknames.constructor === Array) &&
     (heroBody.nicknames.filter((nickname) => typeof nickname != 'string').length === 0),
     (typeof heroBody.talent === 'string'),
-    (typeof heroBody.contact === 'string'),
+    (typeof heroBody.email === 'string'),
     (Number.isInteger(heroBody.age)),
     (Number.isInteger(heroBody.price)),
     (typeof heroBody.rating === 'number'),
@@ -99,24 +99,24 @@ router
     if (!validBody(hero) || Object.keys(hero).length != 8) throw 400;
 
     fetchHeros()
-    .where('persons.contact', hero.contact)
+    .where('users.email', hero.email)
     .then(function (heroData) {
       if (heroData.length > 0) throw 400;
 
-      return knex('persons').where('contact', hero.contact)
+      return knex('users').where('email', hero.email)
     })
-    .then(function (personData) {
-      if (personData.length > 0 && personData[0].name != hero.name) throw 400;
-      if (personData.length > 0) return [personData[0].id];
+    .then(function (userData) {
+      if (userData.length > 0 && userData[0].name != hero.name) throw 400;
+      if (userData.length > 0) return [userData[0].id];
 
-      return knex('persons').insert({
+      return knex('users').insert({
         name: hero.name,
-        contact: hero.contact
+        email: hero.email
       }, 'id')
     })
-    .then(function (person_id) {
+    .then(function (user_id) {
       return knex('heros').insert({
-        person_id: person_id[0],
+        user_id: user_id[0],
         talent: hero.talent,
         age: hero.age,
         price: hero.price,
@@ -157,33 +157,33 @@ router
     if (!validBody(hero)) throw 400;
 
     fetchHeros()
-    .select({person_id: 'persons.id'})
+    .select({user_id: 'users.id'})
     .where('heros.id', req.params.hero_id)
     .then(function (heroData) {
       if (heroData.length === 0) throw 404;
 
-      res.locals.person_id = heroData[0].person_id;
+      res.locals.user_id = heroData[0].user_id;
 
-      if (typeof hero.contact === 'string') {
-          return knex('persons')
-          .whereNot('persons.contact', heroData[0].contact)
-          .andWhere('persons.contact', hero.contact)
+      if (typeof hero.email === 'string') {
+          return knex('users')
+          .whereNot('users.email', heroData[0].email)
+          .andWhere('users.email', hero.email)
       }
     })
-    .then(function(personsData) {
-      if (typeof hero.contact === 'string' && personsData.length > 0) throw 400;
+    .then(function(usersData) {
+      if (typeof hero.email === 'string' && usersData.length > 0) throw 400;
 
-      if (typeof hero.contact === 'string') {
-        return knex('persons')
-        .update({contact: hero.contact})
-        .where('id', res.locals.person_id)
+      if (typeof hero.email === 'string') {
+        return knex('users')
+        .update({email: hero.email})
+        .where('id', res.locals.user_id)
       }
     })
-    .then(function(personsData) {
+    .then(function(usersData) {
       if (typeof hero.name === 'string') {
-        return knex('persons')
+        return knex('users')
         .update({name: hero.name})
-        .where('id', res.locals.person_id)
+        .where('id', res.locals.user_id)
       }
     })
     .then(function() {
@@ -206,7 +206,7 @@ router
       }
     })
     .then(function() {
-      delete hero.contact;
+      delete hero.email;
       delete hero.name;
       delete hero.nicknames;
 

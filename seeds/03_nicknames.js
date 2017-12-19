@@ -14,15 +14,15 @@ function tableLookup(table, returnCol, valueCol, value) {
 }
 
 exports.seed = function(knex, Promise) {
-  return knex('heros').join('persons', 'persons.id', 'heros.person_id').select({id: 'heros.id'}, {contact: 'persons.contact'})
-  .then(function (id_contact) {
+  return knex('heros').join('users', 'users.id', 'heros.user_id').select({id: 'heros.id'}, {email: 'users.email'})
+  .then(function (id_email) {
     let duplicateCheck = [];
     let nicknames = [];
 
     // add nicknames if they exist
     for (let i = 0; i < herosStrings.length; i++) {
       let hero = herosStrings[i].split(', ');
-      // use a combinaton of hero contact and nickname to check uniqueness
+      // use a combinaton of hero email and nickname to check uniqueness
       let compositeName = hero[1].concat(hero[3]);
 
       if (!duplicateCheck.includes(compositeName)) {
@@ -30,7 +30,7 @@ exports.seed = function(knex, Promise) {
 
         if (hero[1] != '') {
           nicknames.push({
-            hero_id: tableLookup(id_contact, 'id', 'contact', hero[3]),
+            hero_id: tableLookup(id_email, 'id', 'email', hero[3]),
             nickname: hero[1]
           })
         }

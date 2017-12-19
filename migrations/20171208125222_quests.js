@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
     table.integer('dungeon_id').references('dungeons.id');
     table.integer('reward');
     table.boolean('completed').defaultTo(false);
-    table.integer('completed_by').references('persons.id');
+    table.integer('completed_by').references('users.id');
   });
 };
 
