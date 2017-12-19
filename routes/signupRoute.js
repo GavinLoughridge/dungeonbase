@@ -12,26 +12,6 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 
-function validBody(signupBody) {
-  return (
-    // loginBody must be an object with two keys
-    typeof signupBody === 'object' &&
-    signupBody.constructor === Object &&
-    Object.keys(signupBody).length === 9 &&
-    // email and password values must be strings
-    typeof signupBody.email === 'string' &&
-    typeof signupBody.password === 'string' &&
-    typeof signupBody.name === 'string' &&
-    typeof signupBody.role === 'string' &&
-    typeof signupBody.nicknames === 'string' &&
-    typeof signupBody.talent === 'string' &&
-    typeof signupBody.age === 'string' &&
-    typeof signupBody.price === 'string' &&
-    typeof signupBody.rating === 'string' &&
-    typeof signupBody.level === 'string'
-  )
-}
-
 router
   .get('/', function (req, res) {
     res.render('signup', {repeat: false});

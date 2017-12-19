@@ -2,6 +2,7 @@
 <html>
   <head>
     <% include partials/head %>
+    <link href="/public/css/signup.css" rel="stylesheet">
   </head>
   <body>
     <main>
@@ -23,8 +24,8 @@
             </div>
             <div class="row">
               <div class="input-field col s12">
-                <input id="passwordConf" type="password" name="passwordConf">
-                <label for="passwordConf">Confirm Password</label>
+                <input id="confirmPassword" type="password" name="confirmPassword">
+                <label for="confirmPassword">Confirm Password</label>
               </div>
             </div>
             <div class="row">
@@ -33,17 +34,6 @@
                 <label for="name">Full Name</label>
               </div>
             </div>
-            <!-- <div class="row">
-              <div class="input-field col s12">
-                <select name="selectValue">
-                  <option value="" disabled selected>Choose one...</option>
-                  <option value="one">One</option>
-                  <option value="two">Two</option>
-                  <option value="three">Three</option>
-                </select>
-                <label>Select Input</label>
-              </div>
-            </div> -->
             <p>
               Acount type:
             </p>
@@ -52,10 +42,10 @@
               <label for="questgiver">Questgiver</label>
             </p>
             <p>
-              <input type="checkbox" class="filled-in" id="hero" name="hero" onclick="toggleFields();"/>
+              <input type="checkbox" class="filled-in" id="hero" name="hero"/>
               <label for="hero">Hero</label>
             </p>
-            <div id="heroFields" style="display: none;">
+            <div id='heroFields' class='notApplicable'>
               <h3>Required information for heros:</h3>
 
               <div class="row">
@@ -95,7 +85,7 @@
                 </div>
               </div>
             </div>
-            <button class="btn" type="button" onclick="checkInput();">Create Account</button>
+            <button id='submit' class="btn">Create Account</button>
           </form>
         </div>
       </div>
