@@ -13,48 +13,36 @@ const session = require('express-session')
 
 app.use('/public', express.static(path.join(__dirname, '/public')));
 
-// app.use(session({
-//   secret: 'uL30nZDNyMWcCq5wCaDV',
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: {
-//     secure: false
-//   }
-// }))
+app.use(session({
+  secret: 'uL30nZDNyMWcCq5wCaDV',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    secure: false
+  }
+}))
 
+app.set('view engine', 'ejs')
+
+app.use('/api/heros', APIherosRoute);
+app.use('/api/quests', APIquestsRoute);
+app.use('/api/questgivers', APIquestgiversRoute);
+
+app.use('/login', loginRoute);
 app.use(function (req, res, next) {
-  console.log('session is:', req.session);
+  if(!req.session.user) {
+    res.redirect('/login')
+  }
 
   next();
 });
 
-app.set('view engine', 'ejs')
-
-// app.use('/login', loginRoute);
-//
-// app.use(function (req, res, next) {
-//   if(!req.session.user) {
-//     res.redirect('/login')
-//   }
-//
-//   next();
-// });
-
 app.get('/', function (req, res) {
   res.redirect('/quests')
 })
-
-// app.use('/heros', herosRoute);
-//
-// app.use('/quests', questsRoute);
-//
-// app.use('/questgivers', questgiversRoute);
-
-app.use('/api/heros', APIherosRoute);
-
-app.use('/api/quests', APIquestsRoute);
-
-app.use('/api/questgivers', APIquestgiversRoute);
+app.use('/heros', herosRoute);
+app.use('/quests', questsRoute);
+app.use('/questgivers', questgiversRoute);
 
 // if another route has not sent a respons, send 'not found'
 app.use(function (req, res) {
