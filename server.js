@@ -50,6 +50,6 @@ app.use(function (req, res) {
   if (!res.headersSent) res.sendStatus(404);
 })
 
-app.listen(PORT, function () {console.log('listening on port', PORT, 'with env', process.env)})
+app.listen(PORT, function () {console.log('listening on port', PORT)})
 
 module.exports = app;
